@@ -28,8 +28,6 @@ function ServicePhoto({ service }: { service: Service }) {
           className="aspect-[16/10] w-full rounded-media object-cover lg:aspect-[4/3]"
         />
       </picture>
-      {/* The photos are AI renders, so they are labelled as such. */}
-      <figcaption className="mt-2 text-xs text-jet-black/60">Ilustrasi</figcaption>
     </figure>
   );
 }

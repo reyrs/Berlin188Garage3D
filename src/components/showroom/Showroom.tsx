@@ -241,7 +241,7 @@ export function Showroom() {
                     <p className="brand-headline text-[clamp(2.1rem,8vw,7.25rem)] leading-[0.9]">{car.brand}</p>
                   </div>
                   <p className="mt-3 text-sm text-cloud-white/75 sm:text-base">
-                    {car.model} <span className="text-cloud-white/50">· Ilustrasi</span>
+                    {car.model}
                   </p>
                 </div>
               ))}

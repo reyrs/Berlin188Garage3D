@@ -140,8 +140,6 @@ export function Services() {
                           sizes="calc(100vw - 2rem)"
                         />
                       </div>
-                      {/* The photos are AI renders, so they are labelled as such. */}
-                      <figcaption className="mt-2 text-xs text-jet-black/60">Ilustrasi</figcaption>
                     </figure>
                   )}
                   <div className="lg:max-w-md">
@@ -202,7 +200,6 @@ export function Services() {
                     {pad(active + 1)} / {pad(SERVICES.length)}
                   </p>
                 </div>
-                <p className="mt-2 text-xs text-jet-black/60">Ilustrasi</p>
               </div>
             </div>
           )}

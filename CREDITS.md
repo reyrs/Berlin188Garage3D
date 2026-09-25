@@ -4,9 +4,9 @@ Car makes, badges and designs are trademarks of their respective owners; Berlin 
 workshop, not a dealer or authorised service centre of the brands shown.
 
 - **Showroom photos** (`assets-src/showroom/` → `public/images/showroom/`): AI-generated images (Gemini) supplied
-  by Berlin 188 Garage, one per make; cropped to 16:9 and 9:16 and resized. Shown with an "Ilustrasi" label.
+  by Berlin 188 Garage, one per make; cropped to 16:9 and 9:16 and resized.
 - **Service photos** (`public/images/services/`): AI-generated reference images supplied by Berlin 188 Garage,
-  cropped, resized and with garbled AI lettering blurred. Shown with an "Ilustrasi" label.
+  cropped, resized and with garbled AI lettering blurred.
 - **Scroll videos** (`public/videos/`, when present): image-to-video clips generated from the photos above
   (see `video-kit/README.md`), re-encoded for scrubbing.
 - **Make logos** (`src/data/brandMarks.ts`): Simple Icons (CC0 icon data; the marks are trademarks of their owners).

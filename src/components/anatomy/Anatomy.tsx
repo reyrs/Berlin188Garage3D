@@ -215,11 +215,10 @@ export function Anatomy() {
             </ButtonLink>
           </div>
 
-          {/* Rail: counter, the illustration note, and the step names with the active one lit. */}
+          {/* Rail: counter and the step names with the active one lit. */}
           <div aria-hidden="true" className="absolute inset-x-4 bottom-6 flex items-end justify-between gap-6 sm:inset-x-6 lg:inset-x-8 lg:bottom-8">
             <p className="spec-label whitespace-nowrap tabular-nums text-cloud-white/80">
               <span className="text-cloud-white">{pad(active + 1)}</span> / {pad(COUNT)}
-              <span className="ml-3 text-cloud-white/45">Ilustrasi</span>
             </p>
             <ol className="flex items-end gap-2.5 sm:gap-5">
               {ANATOMY.map((scene, i) => (
