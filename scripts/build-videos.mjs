@@ -79,6 +79,14 @@ function filter(source, target, focusX) {
   return `crop=${w - (w % 2)}:${h - (h % 2)}:${x}:${y},scale=${target.width}:${target.height}:flags=lanczos,setsar=1`;
 }
 
+/** The output size: maxSize, or smaller when the source would have to be upscaled (720p clips stay 720p). */
+async function fit(input, maxSize) {
+  const source = await probe(input);
+  const scale = Math.min(1, source.width / maxSize.width, source.height / maxSize.height);
+  const even = (n) => Math.round(n / 2) * 2;
+  return { width: even(maxSize.width * scale), height: even(maxSize.height * scale) };
+}
+
 async function encode(input, output, target, focusX) {
   if (!force && (await newer(output, input))) return 'cached';
   const source = await probe(input);
@@ -89,6 +97,14 @@ async function encode(input, output, target, focusX) {
     { maxBuffer: 1 << 24 },
   );
   return 'encoded';
+}
+
+/** First frame as a JPEG next to the clip: shown until the clip has decoded (and instead of it under reduced motion). */
+async function writePoster(video) {
+  const poster = video.replace(/\.mp4$/, '.jpg');
+  if (!force && (await newer(poster, video))) return poster;
+  await run(FFMPEG, ['-hide_banner', '-loglevel', 'error', '-y', '-i', video, '-frames:v', '1', '-q:v', '3', poster]);
+  return poster;
 }
 
 await fs.mkdir(CLIPS_DIR, { recursive: true });
@@ -112,12 +128,20 @@ for (const [slot, files] of clips) {
   if (files['16x9']) jobs.push(['wide', files['16x9'], WIDE, 0.5]);
   const tallSource = files['9x16'] ?? (focus.has(slot) ? files['16x9'] : undefined);
   if (tallSource) jobs.push(['tall', tallSource, TALL, files['9x16'] ? 0.5 : focus.get(slot)]);
-  for (const [kind, input, target, focusX] of jobs) {
+  for (const [kind, input, maxSize, focusX] of jobs) {
     const output = path.join(OUTPUT_DIR, `${slot}-${kind}.mp4`);
+    const target = await fit(input, maxSize);
     const status = await encode(input, output, target, focusX);
+    const poster = await writePoster(output);
     const { duration } = await probe(output);
     const { size } = await fs.stat(output);
-    entry[kind] = { src: `/videos/${slot}-${kind}.mp4`, width: target.width, height: target.height, duration: Number(duration.toFixed(2)) };
+    entry[kind] = {
+      src: `/videos/${slot}-${kind}.mp4`,
+      poster: `/videos/${path.basename(poster)}`,
+      width: target.width,
+      height: target.height,
+      duration: Number(duration.toFixed(2)),
+    };
     console.log(`${`${slot} ${kind}`.padEnd(40)} ${status.padEnd(8)} ${duration.toFixed(1)} s  ${(size / 1024 / 1024).toFixed(1)} MB`);
   }
   if (Object.keys(entry).length) videos[slot] = entry;
@@ -131,6 +155,8 @@ await fs.writeFile(
 
 export interface ScrubVideo {
   src: string;
+  /** First frame, JPEG. */
+  poster: string;
   width: number;
   height: number;
   /** Seconds. */

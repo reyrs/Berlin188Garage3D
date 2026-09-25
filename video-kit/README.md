@@ -7,6 +7,9 @@ video itu otomatis menggantikan foto dan diputar maju/mundur mengikuti scroll
 Semua gambar awal (start frame) ada di `start-frames/`, ukurannya sudah pas untuk
 image-to-video (Higgsfield, Gemini/Veo, Kling, Runway, dll.).
 
+**Animasi scroll ala web viral** (mobil terurai jadi part, x-ray, dan seterusnya, pakai gambar awal + gambar
+akhir): lihat [SCROLL-STORY.md](SCROLL-STORY.md).
+
 ## Alur kerja
 
 1. Buka generator image-to-video, unggah **start frame** sebagai gambar awal.
@@ -87,8 +90,8 @@ lalu tambahkan kalimat aksinya:
 
 ## Ukuran file
 
-Klip dikompres ke 1600×900 (16:9) dan 720×1280 (9:16), 30 fps maks, dengan keyframe
-setiap 6 frame supaya scroll maju-mundur tetap mulus. Hasilnya lebih besar dari video
+Klip dikompres ke maksimal 1600×900 (16:9) dan 720×1280 (9:16), tidak pernah diperbesar
+(klip 720p tetap 720p), 30 fps maks, dengan keyframe setiap 6 frame supaya scroll maju-mundur tetap mulus. Hasilnya lebih besar dari video
 biasa (sekitar 1–4 MB per 5 detik), jadi pakai durasi 5–8 detik saja. Browser hanya
 mengunduh video yang sedang atau akan segera tampil.
 

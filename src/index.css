@@ -231,6 +231,37 @@
   to { opacity: 0; }
 }
 
+/* ---- Anatomi scroll story (Anatomy.tsx) ---- */
+
+/* One 16:9 box for every scene, so hotspot percentages stay on their parts.
+   Phones: a bit wider than the screen, above the caption. From lg: the right
+   three quarters, beside the caption. Every edge fades into the page, so the
+   AI backgrounds never show a frame. */
+.anatomi-stage {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: min(112vw, calc(70svh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  translate: -50% -50%;
+  --fade-x: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  --fade-y: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
+  -webkit-mask-image: var(--fade-x), var(--fade-y);
+  -webkit-mask-composite: source-in;
+  mask-image: var(--fade-x), var(--fade-y);
+  mask-composite: intersect;
+}
+@media (min-width: 64rem) {
+  .anatomi-stage {
+    left: auto;
+    right: 0;
+    top: 50%;
+    width: min(76vw, calc((100svh - 7rem) * 16 / 9));
+    translate: 0 -50%;
+    --fade-x: linear-gradient(to right, transparent, #000 18%, #000 94%, transparent);
+  }
+}
+
 /* SplitText word masks: pad them so tall caps and italics are not clipped. */
 .hs-word-mask {
   padding: 0.08em 0.06em 0.12em;

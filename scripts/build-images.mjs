@@ -4,15 +4,20 @@
 //             (4:3 card, 4:5 portrait) → WIDTHS → AVIF + WebP in public/images/services/
 //   showroom: one photo per make → 16:9 wide + 9:16 tall crops → AVIF + WebP
 //             in public/images/showroom/
+//   anatomi:  scroll-story stills → 16:9 → AVIF + WebP in public/images/anatomi/
 //   kit:      start frames for image-to-video in video-kit/start-frames/
 //
 //   npm run images                  # services + showroom
-//   npm run images -- --showroom    # one group only (--services, --showroom, --kit)
+//   npm run images -- --showroom    # one group only (--services, --showroom, --anatomi, --kit)
 //   npm run images -- tune-up       # one service photo
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 import {
+  ANATOMI,
+  ANATOMI_OUTPUT_DIR,
+  ANATOMI_SOURCE_DIR,
+  ANATOMI_WIDTHS,
   CARD,
   KIT_DIR,
   OUTPUT_DIR,
@@ -29,7 +34,7 @@ import {
 
 const flags = new Set(process.argv.slice(2).filter((a) => a.startsWith('--')));
 const wanted = process.argv.slice(2).filter((a) => !a.startsWith('--'));
-const only = ['--services', '--showroom', '--kit'].filter((f) => flags.has(f));
+const only = ['--services', '--showroom', '--anatomi', '--kit'].filter((f) => flags.has(f));
 const run = (group) => (only.length ? only.includes(`--${group}`) : group !== 'kit');
 
 async function findSource(stamp) {
@@ -117,6 +122,16 @@ if (run('showroom')) {
     const w = await writeVariants(buffer, SHOWROOM_OUTPUT_DIR, `${car.id}-wide`, wide, SHOWROOM_WIDE_WIDTHS, quality);
     const t = await writeVariants(buffer, SHOWROOM_OUTPUT_DIR, `${car.id}-tall`, tall, SHOWROOM_TALL_WIDTHS, quality);
     console.log(`${car.id.padEnd(16)} wide ${w.join(' · ')} | tall ${t.join(' · ')} (avif/webp)`);
+  }
+}
+
+if (run('anatomi')) {
+  await fs.mkdir(ANATOMI_OUTPUT_DIR, { recursive: true });
+  for (const id of ANATOMI) {
+    const buffer = await fs.readFile(path.join(ANATOMI_SOURCE_DIR, `${id}.jpg`));
+    const { wide } = showroomCrops(await sharp(buffer).metadata(), 0.5);
+    const w = await writeVariants(buffer, ANATOMI_OUTPUT_DIR, id, wide, ANATOMI_WIDTHS, { avif: 56, webp: 80 });
+    console.log(`${id.padEnd(8)} ${w.join(' · ')} (avif/webp)`);
   }
 }
 

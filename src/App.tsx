@@ -3,6 +3,7 @@ import { Footer } from './components/layout/Footer';
 import { Showroom } from './components/showroom/Showroom';
 import { GarageDoor } from './components/showroom/GarageDoor';
 import { Services } from './components/services/Services';
+import { Anatomy } from './components/anatomy/Anatomy';
 import { useScrollReveal } from './hooks/useScrollReveal';
 import { useLenis } from './hooks/useLenis';
 import { useReducedMotion } from './hooks/useReducedMotion';
@@ -31,6 +32,7 @@ export default function App() {
       <Header links={NAV_LINKS} />
       <main id="konten" tabIndex={-1} className="outline-none">
         <Showroom />
+        <Anatomy />
         <Services />
       </main>
       <Footer />

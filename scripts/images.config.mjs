@@ -49,6 +49,13 @@ export const SHOWROOM = [
   { id: 'land-rover', focusX: 0.67 },
 ];
 
+// Anatomi scroll story: AI stills (2816×1536) copied into assets-src/anatomi/<id>.jpg,
+// 16:9 centre crop. The stage keeps a 16:9 box on every screen, so no tall crop.
+export const ANATOMI_SOURCE_DIR = 'assets-src/anatomi';
+export const ANATOMI_OUTPUT_DIR = 'public/images/anatomi';
+export const ANATOMI_WIDTHS = [960, 1600, 2400];
+export const ANATOMI = ['urai', 'xray', 'serah'];
+
 // Start frames for image-to-video (video-kit/README.md): the same crops at
 // the size video models expect, services from the blurred full-height photo.
 export const KIT_DIR = 'video-kit/start-frames';

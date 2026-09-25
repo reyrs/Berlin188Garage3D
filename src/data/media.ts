@@ -3,6 +3,8 @@
 
 export interface ScrubVideo {
   src: string;
+  /** First frame, JPEG. */
+  poster: string;
   width: number;
   height: number;
   /** Seconds. */
@@ -16,4 +18,32 @@ export interface VideoSlot {
   tall?: ScrubVideo;
 }
 
-export const VIDEOS: Record<string, VideoSlot> = {};
+export const VIDEOS: Record<string, VideoSlot> = {
+  'anatomi-bongkar': {
+    wide: {
+      src: '/videos/anatomi-bongkar-wide.mp4',
+      poster: '/videos/anatomi-bongkar-wide.jpg',
+      width: 1280,
+      height: 720,
+      duration: 6.5
+    }
+  },
+  'anatomi-padam': {
+    wide: {
+      src: '/videos/anatomi-padam-wide.mp4',
+      poster: '/videos/anatomi-padam-wide.jpg',
+      width: 1280,
+      height: 720,
+      duration: 8
+    }
+  },
+  'anatomi-rakit': {
+    wide: {
+      src: '/videos/anatomi-rakit-wide.mp4',
+      poster: '/videos/anatomi-rakit-wide.jpg',
+      width: 1280,
+      height: 720,
+      duration: 8
+    }
+  }
+};
