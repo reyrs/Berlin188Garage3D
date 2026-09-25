@@ -1,0 +1,25 @@
+{
+  "room": {
+    "lightmap": "lightmap.png",
+    "intensity": 4.7415
+  },
+  "floor": {
+    "lightmap": "floor_lightmap.png",
+    "intensity": 3.4135,
+    "size": [
+      14.0,
+      13.0
+    ],
+    "centre": [
+      0.0,
+      -1.5
+    ]
+  },
+  "encoding": "(irradiance / intensity) ^ (1 / 2.2)",
+  "tile": {
+    "floor": 3.0,
+    "wall": 4.0,
+    "shutter": 2.4,
+    "plate": 1.2
+  }
+}

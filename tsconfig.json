@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "types": ["vite/client"],
+    "strict": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "allowImportingTsExtensions": false,
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "useDefineForClassFields": true
+  },
+  "include": ["src", "vite.config.ts"],
+  // Retired 3D studio (replaced by the photo/video showroom on 2026-09-25).
+  // Nothing imports these any more; kept on disk until they are archived.
+  "exclude": [
+    "src/three",
+    "src/stores",
+    "src/components/stage",
+    "src/components/intro",
+    "src/components/hero",
+    "src/components/brands",
+    "src/components/services/ServicesStory.tsx",
+    "src/hooks/useStudioActivation.ts",
+    "src/hooks/useDeviceTier.ts",
+    "src/data/poster.ts"
+  ]
+}

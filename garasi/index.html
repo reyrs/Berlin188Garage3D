@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Garasi 3D | Berlin 188 Garage</title>
+    <meta name="description" content="Masuk ke garasi Berlin 188 Garage dalam 3D: lihat proses servis dari check-in sampai serah terima, dan mobil diangkat di lift untuk diperiksa dari bawah." />
+    <meta name="theme-color" content="#181818" />
+    <link rel="icon" type="image/png" href="/brand/logo-icon.png" />
+    <link rel="apple-touch-icon" href="/brand/logo-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Berlin 188 Garage" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:title" content="Garasi 3D | Berlin 188 Garage" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var play = true;
+        root.classList.add('js');
+        try {
+          if (sessionStorage.getItem('b188-garage-intro') === '1') play = false;
+          else sessionStorage.setItem('b188-garage-intro', '1');
+        } catch (e) {}
+        if (/[?&]intro\b/.test(location.search)) play = true;
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) play = false;
+        if (/[?&]nointro\b/.test(location.search)) play = false;
+        root.setAttribute('data-intro', play ? 'play' : 'skip');
+      })();
+    </script>
+  </head>
+  <body class="bg-jet-black text-cloud-white">
+    <div id="root"></div>
+    <script type="module" src="/src/garasi/main.tsx"></script>
+  </body>
+</html>
