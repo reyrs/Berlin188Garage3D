@@ -1,7 +1,9 @@
-// "Anatomi servis": the scroll story between the showroom and the services.
-// Media are AI illustrations (video-kit/SCROLL-STORY.md): video scenes are
-// slots in VIDEOS (src/data/media.ts), stills live in public/images/anatomi/.
+// The home page hero and its scroll story ("Anatomi servis"). Scene 0 is the
+// hero (copy from HERO); the rest follow a BMW apart and back together.
+// Media are AI renders (video-kit/SCROLL-STORY.md): video scenes are slots in
+// VIDEOS (src/data/media.ts), stills live in public/images/anatomi/.
 // Copy only restates services and process steps the site already names.
+import { HERO } from './content';
 
 export interface Hotspot {
   label: string;
@@ -10,6 +12,8 @@ export interface Hotspot {
   y: number;
   /** Label to the left of the dot (dots near the right edge). */
   flip?: boolean;
+  /** Service id: the pin links to #layanan-<service>. */
+  service: string;
 }
 
 interface SceneBase {
@@ -33,10 +37,10 @@ export const ANATOMY: AnatomyScene[] = [
     kind: 'video',
     slot: 'anatomi-padam',
     rail: 'Mulai',
-    eyebrow: 'Anatomi servis',
-    title: 'Kami bongkar',
-    emphasis: 'sampai tuntas',
-    body: 'Gulir pelan-pelan dan lihat apa yang kami periksa, dari mesin sampai modul elektrik.',
+    eyebrow: HERO.eyebrow,
+    title: HERO.headlineLead,
+    emphasis: HERO.headlineEmphasis,
+    body: HERO.subtitle,
   },
   {
     id: 'bongkar',
@@ -56,10 +60,10 @@ export const ANATOMY: AnatomyScene[] = [
     title: 'Semua bagian, satu bengkel',
     body: 'Turun mesin, overhaul transmisi, balancing dan shaking machine, sampai salon body.',
     hotspots: [
-      { label: 'Mesin & transmisi', x: 45, y: 57 },
-      { label: 'Kaki-kaki', x: 30.5, y: 57 },
-      { label: 'Bodi & eksterior', x: 69, y: 36 },
-      { label: 'Balancing', x: 88, y: 67, flip: true },
+      { label: 'Mesin & transmisi', x: 45, y: 57, service: 'turun-mesin' },
+      { label: 'Kaki-kaki', x: 30.5, y: 57, service: 'balancing-shaking' },
+      { label: 'Bodi & eksterior', x: 69, y: 36, service: 'salon-body' },
+      { label: 'Balancing', x: 88, y: 67, flip: true, service: 'balancing-shaking' },
     ],
   },
   {
@@ -71,9 +75,9 @@ export const ANATOMY: AnatomyScene[] = [
     title: 'Dibaca sampai ke modulnya',
     body: 'Scan all brand, coding module dan ECU, sampai service hardware ECU.',
     hotspots: [
-      { label: 'Scan all brand', x: 29, y: 43 },
-      { label: 'Coding ECU', x: 54, y: 54.5 },
-      { label: 'Hardware ECU', x: 87, y: 34, flip: true },
+      { label: 'Scan all brand', x: 29, y: 43, service: 'scan-all-brand' },
+      { label: 'Coding ECU', x: 54, y: 54.5, service: 'coding-ecu' },
+      { label: 'Hardware ECU', x: 87, y: 34, flip: true, service: 'service-hardware-ecu' },
     ],
   },
   {

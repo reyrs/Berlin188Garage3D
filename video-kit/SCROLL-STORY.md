@@ -1,7 +1,8 @@
 # Scroll story: animasi scroll ala web viral
 
-> **Status (25 Sep 2026):** section "Anatomi servis" sudah tayang di homepage
-> (`src/components/anatomy/Anatomy.tsx`, teks di `src/data/anatomy.ts`), di antara showroom dan layanan.
+> **Status (26 Sep 2026):** "Anatomi servis" adalah hero homepage (layar pertama, sebelum Layanan):
+> `src/components/anatomy/Anatomy.tsx`, teks di `src/data/anatomy.ts`. Adegan pertama memuat teks hero,
+> tombol booking, dan logo merek.
 > Versi pertama memakai:
 >
 > | Adegan | Media | Sumber |
@@ -52,7 +53,7 @@ berubah atau meleot, generate ulang.
 
 ## Mobil utama
 
-BMW 3 Series abu-abu dari `start-frames/showroom-bmw-16x9.jpg` (foto pertama homepage). Jadi animasi
+BMW 3 Series abu-abu dari `start-frames/showroom-bmw-16x9.jpg` (foto BMW di kartu merek). Jadi animasi
 ini menyambung langsung dari showroom.
 
 ## Alur cerita (4 klip berantai, 16:9)

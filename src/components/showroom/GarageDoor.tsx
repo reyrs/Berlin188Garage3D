@@ -6,15 +6,15 @@ type Phase = 'closed' | 'opening' | 'done';
 
 /** The door stays down at least this long so the brand moment reads. */
 const MIN_CLOSED_MS = 1100;
-/** Longest wait for the first showroom photo before lifting anyway. */
+/** Longest wait for the hero's first frame before lifting anyway. */
 const MAX_WAIT_MS = 3000;
 
 /**
- * Dark rolling garage door over the showroom, once per session (decided
- * before first paint by the inline script in index.html). It doubles as the
- * loader: the red curve under the logo fills until the first photo and the
+ * Dark rolling garage door over the hero, once per session (decided before
+ * first paint by the inline script in index.html). It doubles as the loader:
+ * the red curve under the logo fills until the hero's first frame and the
  * fonts are ready. Then light leaks under the door, it unlatches, lifts, and
- * the showroom lights come on behind it (Showroom.tsx).
+ * the showroom lights come on behind it (Anatomy.tsx).
  *
  * Scrolling, Escape or the skip button open it straight away.
  */
@@ -45,7 +45,7 @@ export function GarageDoor() {
     let shown = 0;
     let frame = 0;
 
-    const photo = document.querySelector<HTMLImageElement>('#top [data-slide] img');
+    const photo = document.querySelector<HTMLImageElement>('#top [data-hero-media] img');
     const photoReady =
       !photo || photo.complete
         ? Promise.resolve()

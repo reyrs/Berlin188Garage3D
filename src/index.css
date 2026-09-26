@@ -33,7 +33,7 @@
 @layer base {
   html {
     color-scheme: light;
-    /* Overscroll above the showroom and below the footer stays dark. */
+    /* Overscroll above the hero and below the footer stays dark. */
     background-color: var(--color-jet-black);
     -webkit-text-size-adjust: 100%;
   }
@@ -219,37 +219,54 @@
   to { opacity: 1; }
 }
 
-/* Showroom "lights off" until the entrance flickers them on (Showroom.tsx). */
-.js .showroom-dim {
+/* Hero "lights off" until the entrance flickers them on (Anatomy.tsx). */
+.js .hero-dim {
   opacity: 0.7;
   animation: dim-fallback 0.6s linear 2.5s forwards;
 }
-.js[data-intro="play"] .showroom-dim {
+.js[data-intro="play"] .hero-dim {
   animation-delay: 6s;
 }
 @keyframes dim-fallback {
   to { opacity: 0; }
 }
 
-/* ---- Anatomi scroll story (Anatomy.tsx) ---- */
+/* ---- Hero + Anatomi scroll story (Anatomy.tsx) ---- */
 
-/* One 16:9 box for every scene, so hotspot percentages stay on their parts.
-   Phones: a bit wider than the screen, above the caption. From lg: the right
-   three quarters, beside the caption. Every edge fades into the page, so the
-   AI backgrounds never show a frame. */
+/* One 16:9 stage for every scene, so hotspot percentages stay on their parts.
+   Phones: under the header, a bit wider than the screen, with the caption
+   below it. From lg: the right three quarters, beside the caption. Every
+   edge fades into the page, so the AI backgrounds never show a frame. */
+.anatomi {
+  --stage-w: min(112vw, calc(62svh * 16 / 9));
+}
 .anatomi-stage {
   position: absolute;
   left: 50%;
-  top: 38%;
-  width: min(112vw, calc(70svh * 16 / 9));
+  top: 4rem;
+  width: var(--stage-w);
   aspect-ratio: 16 / 9;
-  translate: -50% -50%;
+  translate: -50% 0;
   --fade-x: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
-  --fade-y: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
+  --fade-y: linear-gradient(to bottom, transparent, #000 14%, #000 80%, transparent);
   -webkit-mask-image: var(--fade-x), var(--fade-y);
   -webkit-mask-composite: source-in;
   mask-image: var(--fade-x), var(--fade-y);
   mask-composite: intersect;
+}
+/* The caption starts where the stage has faded out. */
+.anatomi-captions {
+  top: calc(4rem + var(--stage-w) * 9 / 16 * 0.88);
+}
+/* Short phones: a smaller car and no label over the logos, so the hero copy,
+   its buttons and the makes still fit above the rail. */
+@media (max-width: 63.99rem) and (max-height: 760px) {
+  .anatomi {
+    --stage-w: min(84vw, calc(62svh * 16 / 9));
+  }
+  .hero-marks-label {
+    display: none;
+  }
 }
 @media (min-width: 64rem) {
   .anatomi-stage {
@@ -259,21 +276,63 @@
     width: min(76vw, calc((100svh - 7rem) * 16 / 9));
     translate: 0 -50%;
     --fade-x: linear-gradient(to right, transparent, #000 18%, #000 94%, transparent);
+    --fade-y: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
   }
+  .anatomi-captions {
+    top: 50%;
+  }
+}
+
+/* ---- Swipe rows and sliders ---- */
+
+.scroll-row {
+  scrollbar-width: none;
+}
+.scroll-row::-webkit-scrollbar {
+  display: none;
+}
+
+/* Sliders (useSnapSlider: Services, Brands): one big slide centred, its
+   neighbours peeking in. The track pads its ends so the first and last
+   slides can centre too. */
+.slider-track {
+  --slide-w: 84vw;
+  padding-inline: calc((100% - var(--slide-w)) / 2);
+}
+.slider-track > [data-slide] {
+  width: var(--slide-w);
+}
+.brand-slide {
+  aspect-ratio: 4 / 5;
+}
+@media (min-width: 40rem) {
+  .slider-track {
+    --slide-w: 88vw;
+  }
+  .brand-slide {
+    aspect-ratio: 16 / 9;
+  }
+}
+@media (min-width: 64rem) {
+  .slider-track {
+    --slide-w: min(78vw, 76rem, calc(62svh * 16 / 9));
+  }
+}
+@media (pointer: fine) {
+  .slider-track {
+    cursor: grab;
+  }
+}
+.slider-track[data-dragging] {
+  scroll-snap-type: none;
+  cursor: grabbing;
+  user-select: none;
 }
 
 /* SplitText word masks: pad them so tall caps and italics are not clipped. */
 .hs-word-mask {
   padding: 0.08em 0.06em 0.12em;
   margin: -0.08em -0.06em -0.12em;
-}
-
-/* Showroom captions: the scroll timeline shows one at a time (autoAlpha
-   overrides this inline), so they never pile up before it starts. */
-.js [data-caption],
-.js .showroom-eyebrow {
-  opacity: 0;
-  visibility: hidden;
 }
 
 /* Scroll reveal (IntersectionObserver adds .is-visible). Content stays
@@ -292,7 +351,7 @@
   .garage-door {
     display: none;
   }
-  .js .showroom-dim {
+  .js .hero-dim {
     opacity: 0;
     animation: none;
   }

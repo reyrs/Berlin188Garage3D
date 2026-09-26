@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowDown, WhatsappLogo } from '@phosphor-icons/react';
 import { ANATOMY, type Hotspot } from '../../data/anatomy';
+import { HERO } from '../../data/content';
 import { VIDEOS } from '../../data/media';
+import { SHOWROOM } from '../../data/showroom';
 import { bookingLink } from '../../lib/whatsapp';
-import { gsap, useGSAP } from '../../lib/gsap';
+import { gsap, SplitText, useGSAP } from '../../lib/gsap';
+import { useIntroOpen } from '../../lib/intro';
 import { ScrubController } from '../../lib/scrub';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { BrandMarkIcon } from '../ui/BrandMarkIcon';
 import { ButtonLink } from '../ui/ButtonLink';
 import { CurveAccent } from '../ui/CurveAccent';
 import { ScrubVideo } from '../media/ScrubVideo';
@@ -16,7 +20,7 @@ const AT = [0, 1.2, 2.5, 3.6, 4.7, 6];
 /** Timeline length in units, including a short hold on the last scene. */
 const UNITS = 7;
 /** Scroll distance per timeline unit. */
-const UNIT_SVH = 70;
+const UNIT_SVH = 45;
 /** Crossfade length between scenes. */
 const FADE = 0.2;
 const activeAt = (t: number) => AT.reduce((n, at, i) => (t >= at + FADE / 2 ? i : n), 0);
@@ -25,18 +29,21 @@ const WIDTHS = [960, 1600, 2400];
 const SIZES = '(min-width: 64rem) 76vw, 112vw';
 
 /**
- * "Anatomi servis": a pinned scroll story. A BMW goes dark, comes apart,
- * gets read down to its modules, and comes back together. Video scenes play
- * frame by frame with the scroll; stills push in and pin their hotspots.
+ * The home page hero and its scroll story ("Anatomi servis"), one pinned
+ * section. The hero copy, booking and the makes sit beside a BMW whose
+ * showroom goes dark as you scroll; then the car comes apart, gets read down
+ * to its modules and comes back together. Video scenes play frame by frame
+ * with the scroll; stills push in and pin hotspots that link to the services.
  */
 export function Anatomy() {
   const rootRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
+  const introOpen = useIntroOpen();
   const [active, setActive] = useState(0);
   const [near, setNear] = useState(false);
   const [scrubbers] = useState(() => ANATOMY.map(() => new ScrubController()));
 
-  // Start downloading clips once the section is about a screen away.
+  // Clips load once the section is on (or about a screen from) the screen.
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
@@ -53,6 +60,66 @@ export function Anatomy() {
     return () => observer.disconnect();
   }, []);
 
+  // Entrance, once the garage door starts lifting (or on load when there is
+  // no intro): the lights flicker on, the car settles, the headline rises.
+  // SplitText measures glyphs, so it waits for Poppins.
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || !introOpen) return;
+    const items = root.querySelectorAll<HTMLElement>('[data-hero-reveal]');
+    if (reducedMotion) {
+      gsap.set(items, { opacity: 1, animation: 'none' });
+      gsap.set(root.querySelector('.hero-dim'), { opacity: 0, animation: 'none' });
+      return;
+    }
+    let ctx: gsap.Context | undefined;
+    let cancelled = false;
+    document.fonts.ready.then(() => {
+      if (cancelled) return;
+      ctx = gsap.context(() => {
+        // Masks get "hs-word-mask" (padded in index.css so caps and italics are not clipped).
+        const split = SplitText.create('.hero-split', { type: 'words,chars', mask: 'words', wordsClass: 'hs-word' });
+        gsap.set(items, { opacity: 1, animation: 'none' });
+        gsap.set('.hero-dim', { animation: 'none' });
+        gsap
+          .timeline({ defaults: { ease: 'expo.out' } })
+          // Fluorescent tubes catching: two quick flickers, then full light.
+          .set('.hero-dim', { opacity: 0.7 }, 0)
+          .to(
+            '.hero-dim',
+            {
+              keyframes: [
+                { opacity: 0.3, duration: 0.06, ease: 'none' },
+                { opacity: 0.62, duration: 0.07, ease: 'none' },
+                { opacity: 0.18, duration: 0.06, ease: 'none' },
+                { opacity: 0.45, duration: 0.08, ease: 'none' },
+                { opacity: 0, duration: 0.9, ease: 'power2.out' },
+              ],
+            },
+            0,
+          )
+          .from('[data-hero-media]', { scale: 1.08, duration: 2.4, ease: 'power3.out' }, 0)
+          .from('.hero-eyebrow', { y: 16, autoAlpha: 0, duration: 0.7 }, 0.15)
+          .from(split.chars, { yPercent: 118, duration: 1.05, stagger: 0.022 }, 0.2)
+          .fromTo(
+            '.hero-emphasis',
+            { clipPath: 'inset(0% 100% 0% 0%)' },
+            { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, ease: 'expo.inOut', clearProps: 'clipPath' },
+            0.45,
+          )
+          .from('.hero-sub', { y: 18, autoAlpha: 0, duration: 0.8 }, 0.7)
+          .from('.hero-ctas > *', { y: 18, autoAlpha: 0, duration: 0.7, stagger: 0.08 }, 0.8)
+          .from('.hero-marks', { y: 12, autoAlpha: 0, duration: 0.7 }, 0.95)
+          .from('.anatomi-rail', { autoAlpha: 0, duration: 0.8 }, 0.9);
+      }, root);
+    });
+    return () => {
+      cancelled = true;
+      ctx?.revert();
+    };
+  }, [introOpen, reducedMotion]);
+
+  // The scroll story. Transforms and opacity only, so it stays on the compositor.
   useGSAP(
     () => {
       const root = rootRef.current;
@@ -103,9 +170,9 @@ export function Anatomy() {
           if (scene.kind !== 'still') return;
           const end = AT[i + 1] ?? UNITS;
           tl.fromTo(scenes[i].querySelector('[data-still]'), { scale: 1.08 }, { scale: 1, duration: end - AT[i], ease: 'power1.out' }, AT[i]);
-          const dots = scenes[i].querySelectorAll('[data-hotspot]');
-          if (dots.length) {
-            tl.fromTo(dots, { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 1, scale: 1, duration: 0.12, stagger: 0.1, ease: 'back.out(2)' }, AT[i] + 0.3);
+          const pins = scenes[i].querySelectorAll('[data-hotspot]');
+          if (pins.length) {
+            tl.fromTo(pins, { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 1, scale: 1, duration: 0.12, stagger: 0.1, ease: 'back.out(2)' }, AT[i] + 0.3);
           }
         });
         // The diagnostic scan sweeps across the x-ray.
@@ -122,30 +189,26 @@ export function Anatomy() {
   return (
     <section
       ref={rootRef}
-      id="anatomi"
-      aria-labelledby="anatomi-title"
-      className="relative bg-jet-black text-cloud-white"
+      id="top"
+      aria-labelledby="hero-title"
+      className="anatomi relative bg-jet-black text-cloud-white"
       style={{ height: `calc(100svh + ${UNITS * UNIT_SVH}svh)` }}
     >
-      {/* The whole story for screen readers; the visual captions below repeat it one step at a time. */}
-      <div className="sr-only">
-        <h2 id="anatomi-title">Anatomi servis: {ANATOMY[0].title} {ANATOMY[0].emphasis}</h2>
-        <ol>
-          {ANATOMY.slice(1).map((scene) => (
-            <li key={scene.id}>
-              {scene.eyebrow}. {scene.title} {scene.emphasis}. {scene.body}
-            </li>
-          ))}
-        </ol>
-      </div>
-
       <div className="sticky top-0 h-[100svh] overflow-hidden">
-        {/* Stage: one 16:9 box whose edges fade into the page. Illustrations, decorative. */}
+        {/* Stage: one 16:9 box whose edges fade into the page. Decorative; the
+            hotspot links are pointer shortcuts (the services are linked below). */}
         <div aria-hidden="true" className="anatomi-stage">
           {ANATOMY.map((scene, i) => (
             <div key={scene.id} data-scene className="absolute inset-0">
               {scene.kind === 'video' ? (
-                <VideoScene slot={scene.slot} scrubber={scrubbers[i]} load={near && !reducedMotion && Math.abs(i - active) <= 1} />
+                <div data-hero-media={i === 0 ? '' : undefined} className="absolute inset-0 will-change-transform">
+                  <VideoScene
+                    slot={scene.slot}
+                    scrubber={scrubbers[i]}
+                    load={near && !reducedMotion && Math.abs(i - active) <= 1}
+                    priority={i === 0}
+                  />
+                </div>
               ) : (
                 <div data-still className="absolute inset-0 will-change-transform">
                   <StillPicture id={scene.image} />
@@ -164,63 +227,120 @@ export function Anatomy() {
           ))}
         </div>
 
+        {/* Lights off until the entrance switches them on. */}
+        <div aria-hidden="true" className="hero-dim pointer-events-none absolute inset-0 bg-jet-black" />
+
         {/* Scrims keep the copy legible where it sits over the stage. */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-x-0 top-0 h-32 bg-linear-to-b from-jet-black to-jet-black/0" />
-          <div className="absolute inset-x-0 bottom-0 h-[48%] bg-linear-to-t from-jet-black via-jet-black/80 to-jet-black/0 lg:hidden" />
+          <div className="absolute inset-x-0 top-0 h-28 bg-linear-to-b from-jet-black/85 to-jet-black/0" />
+          <div className="absolute inset-x-0 bottom-0 h-[58%] bg-linear-to-t from-jet-black via-jet-black/90 to-jet-black/0 lg:hidden" />
           <div className="absolute inset-y-0 left-0 hidden w-[42%] bg-linear-to-r from-jet-black via-jet-black/70 to-jet-black/0 lg:block" />
         </div>
 
-        <div className="relative mx-auto h-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Captions share one grid cell; the timeline shows one at a time. */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-x-4 bottom-40 grid items-end sm:inset-x-6 lg:inset-x-8 lg:top-1/2 lg:bottom-auto lg:max-w-md lg:-translate-y-1/2 lg:items-center"
-          >
-            {ANATOMY.map((scene) => (
-              <div key={scene.id} data-anatomi-caption className="col-start-1 row-start-1">
-                <p className="spec-label text-cloud-white/70">{scene.eyebrow}</p>
-                <p
-                  className={`brand-headline mt-4 leading-[0.95] ${
-                    scene.emphasis ? 'text-[clamp(2.2rem,4.6vw,4.25rem)]' : 'text-[clamp(1.85rem,3.4vw,3rem)]'
-                  }`}
-                >
-                  <span className="block">{scene.title}</span>
-                  {scene.emphasis && <span className="brand-emphasis mt-[0.14em] whitespace-nowrap">{scene.emphasis}</span>}
-                </p>
-                <p className="mt-5 max-w-sm text-base leading-relaxed text-cloud-white/80 sm:text-lg">{scene.body}</p>
-                {scene.kind === 'still' && scene.hotspots.length > 0 && (
-                  <ul className="mt-5 flex flex-wrap gap-2 lg:hidden">
-                    {scene.hotspots.map((spot) => (
-                      <li key={spot.label} className="spec-label rounded-lg px-2.5 py-1.5 text-[0.6875rem] text-cloud-white/85 ring-1 ring-cloud-white/20">
-                        {spot.label}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+        <div className="pointer-events-none relative mx-auto h-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Captions share one grid cell; the timeline shows one at a time. The
+              hero and the last step (booking) are real content; the steps in
+              between repeat the sr-only list below. */}
+          <div className="anatomi-captions pointer-events-auto absolute inset-x-4 grid items-start sm:inset-x-6 lg:inset-x-8 lg:max-w-md lg:-translate-y-1/2 lg:items-center">
+            <div data-anatomi-caption className="col-start-1 row-start-1">
+              <p data-hero-reveal className="hero-eyebrow spec-label text-cloud-white/80">
+                {HERO.eyebrow}
+              </p>
+              <h1 id="hero-title" data-hero-reveal className="brand-headline mt-4 text-[clamp(2.3rem,5vw,4.75rem)] leading-[0.95] lg:mt-5">
+                <span className="hero-split block">{HERO.headlineLead}</span>
+                <span className="hero-emphasis brand-emphasis mt-[0.14em] whitespace-nowrap">
+                  <span className="hero-split">{HERO.headlineEmphasis}</span>
+                </span>
+              </h1>
+              <p data-hero-reveal className="hero-sub mt-4 max-w-md text-base leading-relaxed text-cloud-white/85 sm:text-lg lg:mt-6">
+                {HERO.subtitle}
+              </p>
+              <div data-hero-reveal className="hero-ctas mt-5 flex flex-wrap items-center gap-3 lg:mt-8">
+                <ButtonLink href={bookingLink()} external>
+                  <WhatsappLogo weight="duotone" size={22} aria-hidden="true" />
+                  {HERO.primaryCta}
+                </ButtonLink>
+                <ButtonLink href="#layanan" variant="on-dark">
+                  {HERO.secondaryCta}
+                  <ArrowDown weight="duotone" size={20} aria-hidden="true" />
+                </ButtonLink>
               </div>
-            ))}
+              <a
+                data-hero-reveal
+                href="#merek"
+                aria-label={`Merek yang kami servis: ${SHOWROOM.map((car) => car.brand).join(', ')}`}
+                className="hero-marks group mt-6 block w-fit lg:mt-10"
+              >
+                <span className="hero-marks-label spec-label block text-cloud-white/60 transition-colors group-hover:text-cloud-white">
+                  Merek yang kami servis
+                </span>
+                <span className="mt-3 flex items-center gap-5 text-cloud-white/80 [--mark:1.25rem] sm:gap-6 sm:[--mark:1.5rem]">
+                  {SHOWROOM.map((car) => (
+                    <BrandMarkIcon key={car.id} id={car.id} />
+                  ))}
+                </span>
+              </a>
+            </div>
+
+            {ANATOMY.slice(1).map((scene, i) => {
+              const last = i === COUNT - 2;
+              return (
+                <div key={scene.id} data-anatomi-caption aria-hidden={last ? undefined : true} className="col-start-1 row-start-1">
+                  <p className="spec-label text-cloud-white/70">{scene.eyebrow}</p>
+                  <p
+                    className={`brand-headline mt-4 leading-[0.95] ${
+                      scene.emphasis ? 'text-[clamp(2.2rem,4.6vw,4.25rem)]' : 'text-[clamp(1.85rem,3.4vw,3rem)]'
+                    }`}
+                  >
+                    <span className="block">{scene.title}</span>
+                    {scene.emphasis && <span className="brand-emphasis mt-[0.14em] whitespace-nowrap">{scene.emphasis}</span>}
+                  </p>
+                  <p className="mt-4 max-w-sm text-base leading-relaxed text-cloud-white/80 sm:text-lg lg:mt-5">{scene.body}</p>
+                  {scene.kind === 'still' && scene.hotspots.length > 0 && (
+                    <ul className="mt-5 flex flex-wrap gap-2 lg:hidden">
+                      {scene.hotspots.map((spot) => (
+                        <li key={spot.label}>
+                          <a
+                            href={`#layanan-${spot.service}`}
+                            tabIndex={-1}
+                            className="spec-label inline-flex min-h-9 items-center rounded-lg px-2.5 text-[0.6875rem] text-cloud-white/85 ring-1 ring-cloud-white/20 active:bg-berlin-blue"
+                          >
+                            {spot.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {last && (
+                    <div className="anatomi-cta mt-6 flex flex-wrap items-center gap-3 lg:mt-8">
+                      <ButtonLink href={bookingLink()} external>
+                        <WhatsappLogo weight="duotone" size={22} aria-hidden="true" />
+                        Booking via WhatsApp
+                      </ButtonLink>
+                      {/* Phones: the services follow right below, one button is enough there. */}
+                      <ButtonLink href="#layanan" variant="on-dark" className="max-sm:hidden">
+                        Lihat layanan
+                        <ArrowDown weight="duotone" size={20} aria-hidden="true" />
+                      </ButtonLink>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
-          {/* Final call to action: outside the aria-hidden captions so it stays reachable. */}
-          <div className="anatomi-cta absolute inset-x-4 bottom-20 flex flex-wrap items-center gap-3 sm:inset-x-6 lg:inset-x-8 lg:top-[calc(50%_+_9rem)] lg:bottom-auto">
-            <ButtonLink href={bookingLink()} external>
-              <WhatsappLogo weight="duotone" size={22} aria-hidden="true" />
-              Booking via WhatsApp
-            </ButtonLink>
-            {/* Phones: the services follow right below, one button is enough there. */}
-            <ButtonLink href="#layanan" variant="on-dark" className="max-sm:hidden">
-              Lihat layanan
-              <ArrowDown weight="duotone" size={20} aria-hidden="true" />
-            </ButtonLink>
-          </div>
-
-          {/* Rail: counter and the step names with the active one lit. */}
-          <div aria-hidden="true" className="absolute inset-x-4 bottom-6 flex items-end justify-between gap-6 sm:inset-x-6 lg:inset-x-8 lg:bottom-8">
-            <p className="spec-label whitespace-nowrap tabular-nums text-cloud-white/80">
-              <span className="text-cloud-white">{pad(active + 1)}</span> / {pad(COUNT)}
-            </p>
-            <ol className="flex items-end gap-2.5 sm:gap-5">
+          {/* Rail: counter, a way out of the story, and the step names with the active one lit. */}
+          <div className="anatomi-rail pointer-events-auto absolute inset-x-4 bottom-6 flex items-end justify-between gap-4 sm:inset-x-6 lg:inset-x-8 lg:bottom-8">
+            <div className="flex items-end gap-4 sm:gap-6">
+              <p aria-hidden="true" className="spec-label whitespace-nowrap tabular-nums text-cloud-white/80">
+                <span className="text-cloud-white">{pad(active + 1)}</span> / {pad(COUNT)}
+              </p>
+              <a href="#layanan" className="spec-label -my-3 inline-flex items-center gap-1.5 py-3 whitespace-nowrap text-cloud-white/70 transition-colors hover:text-cloud-white">
+                Lewati<span className="max-sm:hidden"> animasi</span>
+                <ArrowDown weight="bold" size={14} aria-hidden="true" />
+              </a>
+            </div>
+            <ol aria-hidden="true" className="flex items-end gap-2.5 sm:gap-5">
               {ANATOMY.map((scene, i) => (
                 <li key={scene.id} className="flex flex-col items-center gap-2">
                   <span
@@ -233,11 +353,23 @@ export function Anatomy() {
                   <span
                     className={`block size-1.5 rounded-full bg-cloud-white transition-opacity duration-300 md:hidden ${i === active ? 'opacity-100' : 'opacity-35'}`}
                   />
-                  <CurveAccent className={`h-1.5 w-4 transition-opacity sm:w-6 duration-300 ${i === active ? 'opacity-100' : 'opacity-0'}`} />
+                  <CurveAccent className={`h-1.5 w-4 transition-opacity duration-300 sm:w-6 ${i === active ? 'opacity-100' : 'opacity-0'}`} />
                 </li>
               ))}
             </ol>
           </div>
+        </div>
+
+        {/* The whole story for screen readers; the visual steps above show it one at a time. */}
+        <div className="sr-only">
+          <h2>Anatomi servis</h2>
+          <ol>
+            {ANATOMY.slice(1, -1).map((scene) => (
+              <li key={scene.id}>
+                {scene.eyebrow}. {scene.title} {scene.emphasis}. {scene.body}
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
     </section>
@@ -245,12 +377,21 @@ export function Anatomy() {
 }
 
 /** A clip's first frame, with the clip over it once it has decoded. */
-function VideoScene({ slot, scrubber, load }: { slot: string; scrubber: ScrubController; load: boolean }) {
+function VideoScene({ slot, scrubber, load, priority }: { slot: string; scrubber: ScrubController; load: boolean; priority: boolean }) {
   const clip = VIDEOS[slot]?.wide;
   if (!clip) return null;
   return (
     <>
-      <img src={clip.poster} width={clip.width} height={clip.height} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+      <img
+        src={clip.poster}
+        width={clip.width}
+        height={clip.height}
+        alt=""
+        loading={priority ? 'eager' : 'lazy'}
+        fetchPriority={priority ? 'high' : 'low'}
+        decoding="async"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
       <ScrubVideo slot={VIDEOS[slot]} scrubber={scrubber} load={load} className="absolute inset-0 h-full w-full object-cover" />
     </>
   );
@@ -276,21 +417,30 @@ function StillPicture({ id }: { id: string }) {
   );
 }
 
-/** A red-ring pin on the still; the label shows from lg up (phones list them under the caption). */
+/**
+ * A red-ring pin on the still, linking to its service. The label shows from
+ * lg up; phones get the same links as chips under the caption.
+ */
 function HotspotPin({ spot }: { spot: Hotspot }) {
   return (
-    <div data-hotspot className="absolute" style={{ left: `${spot.x}%`, top: `${spot.y}%` }}>
-      <span className="absolute -top-2 -left-2 block size-4 rounded-full border-2 border-berlin-red bg-jet-black/60">
+    <a
+      data-hotspot
+      href={`#layanan-${spot.service}`}
+      tabIndex={-1}
+      className="group absolute"
+      style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
+    >
+      <span className="absolute -top-2 -left-2 block size-4 rounded-full border-2 border-berlin-red bg-jet-black/60 before:absolute before:-inset-3 before:content-['']">
         <span className="absolute inset-[3px] rounded-full bg-cloud-white" />
         <span className="absolute -inset-1 rounded-full border border-berlin-red/60 motion-safe:animate-ping" />
       </span>
       <span
-        className={`spec-label absolute top-0 hidden -translate-y-1/2 rounded-lg bg-jet-black/85 px-2.5 py-1.5 text-[0.6875rem] whitespace-nowrap text-cloud-white ring-1 ring-cloud-white/15 lg:block ${
+        className={`spec-label absolute top-0 hidden -translate-y-1/2 rounded-lg bg-jet-black/85 px-2.5 py-1.5 text-[0.6875rem] whitespace-nowrap text-cloud-white ring-1 ring-cloud-white/15 transition-colors group-hover:bg-berlin-blue group-hover:ring-berlin-blue lg:block ${
           spot.flip ? 'right-4' : 'left-4'
         }`}
       >
         {spot.label}
       </span>
-    </div>
+    </a>
   );
 }

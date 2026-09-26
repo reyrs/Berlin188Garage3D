@@ -36,11 +36,8 @@
       })();
     </script>
 
-    <!-- First showroom photo (the LCP image), matching the <picture> in Showroom.tsx. -->
-    <link rel="preload" as="image" type="image/avif" media="(orientation: portrait)" fetchpriority="high"
-      imagesrcset="/images/showroom/bmw-tall-540.avif 540w, /images/showroom/bmw-tall-864.avif 864w" imagesizes="100vw" />
-    <link rel="preload" as="image" type="image/avif" media="(orientation: landscape)" fetchpriority="high"
-      imagesrcset="/images/showroom/bmw-wide-1280.avif 1280w, /images/showroom/bmw-wide-1920.avif 1920w, /images/showroom/bmw-wide-2560.avif 2560w" imagesizes="100vw" />
+    <!-- The hero's first frame (the LCP image), the poster of the first clip in Anatomy.tsx. -->
+    <link rel="preload" as="image" href="/videos/anatomi-padam-wide.jpg" fetchpriority="high" />
 
     <script type="application/ld+json">
     {

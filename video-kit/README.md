@@ -25,7 +25,10 @@ akhir): lihat [SCROLL-STORY.md](SCROLL-STORY.md).
    menaruh hasilnya di `public/videos/`, dan mendaftarkannya di `src/data/media.ts`.
    Klip yang sudah diproses dilewati; `npm run videos -- --force` untuk proses ulang.
 
-Prioritas: 6 video showroom dulu (paling terlihat, di layar pertama). Video layanan opsional.
+Prioritas: video **Anatomi** (hero di layar pertama, lihat [SCROLL-STORY.md](SCROLL-STORY.md)).
+Foto showroom per merek sekarang tampil di slider "Merek yang kami servis", dan foto layanan di kartu per
+kelompok, keduanya sebagai foto diam. Jadi klip showroom dan klip layanan di bawah ini belum dipakai di
+halaman.
 
 **Showroom cukup versi 16:9.** Versi HP (9:16) dipotong otomatis dari video 16:9,
 dengan titik tengah di depan mobil (sama seperti fotonya). Buat `-9x16` sendiri
