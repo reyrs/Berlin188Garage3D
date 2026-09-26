@@ -53,6 +53,7 @@ export function Brands() {
             >
               <BrandMarkIcon id={car.id} className="text-cloud-white [--mark:2rem] sm:[--mark:2.75rem]" />
               <h3 className="brand-headline mt-3 text-[clamp(2rem,7vw,6.5rem)] leading-[0.9]">{car.brand}</h3>
+              <p className="mt-2 text-sm text-cloud-white/75 sm:mt-3 sm:text-base">{car.model}</p>
               <ButtonLink
                 href={bookingLink(`Halo Berlin 188 Garage, saya mau booking servis ${car.brand} saya.`)}
                 external
