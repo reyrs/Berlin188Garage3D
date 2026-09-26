@@ -53,18 +53,16 @@ export function Brands() {
             >
               <BrandMarkIcon id={car.id} className="text-cloud-white [--mark:2rem] sm:[--mark:2.75rem]" />
               <h3 className="brand-headline mt-3 text-[clamp(2rem,7vw,6.5rem)] leading-[0.9]">{car.brand}</h3>
-              <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
-                <ButtonLink
-                  href={bookingLink(`Halo Berlin 188 Garage, saya mau booking servis ${car.brand} saya.`)}
-                  external
-                  size="sm"
-                  tabIndex={i === active ? 0 : -1}
-                >
-                  <WhatsappLogo weight="duotone" size={20} aria-hidden="true" />
-                  Booking servis {car.brand}
-                </ButtonLink>
-                <p className="text-sm text-cloud-white/65 max-sm:hidden">Di foto: {car.model}</p>
-              </div>
+              <ButtonLink
+                href={bookingLink(`Halo Berlin 188 Garage, saya mau booking servis ${car.brand} saya.`)}
+                external
+                size="sm"
+                tabIndex={i === active ? 0 : -1}
+                className="mt-4"
+              >
+                <WhatsappLogo weight="duotone" size={20} aria-hidden="true" />
+                Booking servis {car.brand}
+              </ButtonLink>
             </div>
           </article>
         ))}
