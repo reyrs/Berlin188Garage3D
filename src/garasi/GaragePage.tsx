@@ -84,6 +84,12 @@ export function GaragePage() {
             Layanan
           </a>
           <a
+            href="/#promo"
+            className="rounded-lg px-3 py-1.5 text-xs sm:text-sm font-medium text-cloud-white/80 transition-colors hover:text-cloud-white hover:bg-cloud-white/10"
+          >
+            Promo
+          </a>
+          <a
             href="/#cek-servis"
             className="rounded-lg px-3 py-1.5 text-xs sm:text-sm font-medium text-cloud-white/80 transition-colors hover:text-cloud-white hover:bg-cloud-white/10"
           >

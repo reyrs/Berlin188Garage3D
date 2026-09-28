@@ -7,6 +7,7 @@ import { House, CaretRight } from '@phosphor-icons/react';
 const MARKETPLACE_NAV_LINKS: NavLink[] = [
   { href: '/', label: 'Beranda' },
   { href: '/#layanan', label: 'Layanan' },
+  { href: '/#promo', label: 'Promo' },
   { href: '/#cek-servis', label: 'Cek Servis' },
   { href: '/marketplace/', label: 'Suku Cadang' },
   { href: '/garasi/', label: 'Garasi 3D' },

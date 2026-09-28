@@ -3,6 +3,7 @@ import { Footer } from './components/layout/Footer';
 import { GarageDoor } from './components/showroom/GarageDoor';
 import { Services } from './components/services/Services';
 import { Anatomy } from './components/anatomy/Anatomy';
+import { PromoSection } from './components/promo/PromoSection';
 import { ServiceTrackingSection } from './components/tracking/ServiceTrackingSection';
 import { MarketplaceSection } from './components/marketplace/MarketplaceSection';
 import { Brands } from './components/brands/Brands';
@@ -13,6 +14,7 @@ import { useReducedMotion } from './hooks/useReducedMotion';
 
 const NAV_LINKS: NavLink[] = [
   { href: '#layanan', label: 'Layanan' },
+  { href: '#promo', label: 'Promo' },
   { href: '#cek-servis', label: 'Cek Servis' },
   { href: '#marketplace', label: 'Suku Cadang' },
   { href: '/garasi/', label: 'Garasi 3D' },
@@ -38,6 +40,7 @@ export default function App() {
       <main id="konten" tabIndex={-1} className="outline-none">
         <Anatomy />
         <Services />
+        <PromoSection />
         <ServiceTrackingSection />
         <MarketplaceSection />
         <Brands />
