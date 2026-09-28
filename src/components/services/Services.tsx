@@ -86,7 +86,7 @@ export function Services() {
           <h2 id="layanan-title" className="brand-headline mt-4 text-[clamp(2rem,4vw,3.5rem)] leading-[0.98]">
             Dari mesin sampai <span className="brand-emphasis mt-[0.1em]">towing</span>
           </h2>
-          <p className="mt-5 max-w-md text-base leading-relaxed text-jet-black/75 sm:text-lg">
+          <p className="mt-5 max-w-md text-base leading-relaxed text-berlin-blue-dark/80 sm:text-lg">
             Empat belas layanan dalam lima kelompok. Geser atau pilih kelompoknya.
           </p>
         </header>
@@ -107,12 +107,12 @@ export function Services() {
                   aria-current={current ? 'true' : undefined}
                   className={`inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-xl px-4 text-[0.9375rem] font-semibold whitespace-nowrap transition-colors duration-200 ${
                     current
-                      ? 'bg-jet-black text-cloud-white'
-                      : 'bg-white text-jet-black/75 ring-1 ring-jet-black/10 hover:text-jet-black hover:ring-jet-black/25'
+                      ? 'bg-berlin-blue text-white shadow-product'
+                      : 'bg-white text-berlin-blue-dark/80 ring-1 ring-berlin-blue/20 hover:text-berlin-blue hover:ring-berlin-blue/40'
                   }`}
                 >
                   {c.short}
-                  <span className={`text-xs tabular-nums ${current ? 'text-cloud-white/60' : 'text-jet-black/45'}`}>{size}</span>
+                  <span className={`text-xs tabular-nums ${current ? 'text-white/70' : 'text-berlin-blue-dark/50'}`}>{size}</span>
                 </button>
               </li>
             );
@@ -130,7 +130,7 @@ export function Services() {
               data-slide
               aria-roledescription="slide"
               aria-labelledby={`layanan-${service.id}-title`}
-              className={`flex shrink-0 scroll-mt-24 snap-center flex-col overflow-hidden rounded-card bg-white shadow-float ring-1 ring-jet-black/5 transition-[opacity,scale] duration-500 ease-out-quint lg:flex-row ${
+              className={`flex shrink-0 scroll-mt-24 snap-center flex-col overflow-hidden rounded-card bg-white shadow-float ring-1 ring-berlin-blue/15 transition-[opacity,scale] duration-500 ease-out-quint lg:flex-row ${
                 current ? 'opacity-100' : 'scale-[0.94] opacity-40'
               }`}
             >
@@ -149,7 +149,7 @@ export function Services() {
                   {service.name}
                 </h3>
                 <CurveAccent className="mt-4 h-2 w-20" />
-                <p className="mt-4 leading-relaxed text-jet-black/75 lg:text-lg">{service.description}</p>
+                <p className="mt-4 leading-relaxed text-berlin-blue-dark/80 lg:text-lg">{service.description}</p>
                 <div className="mt-auto pt-6">
                   <ButtonLink href={serviceInquiryLink(service.name)} external size="sm" tabIndex={current ? 0 : -1}>
                     <WhatsappLogo weight="duotone" size={20} aria-hidden="true" />
@@ -164,9 +164,9 @@ export function Services() {
 
       {/* Progress through the fourteen, the arrows on smaller screens, and a way to ask about anything else. */}
       <div className="mx-auto mt-6 max-w-7xl px-4 sm:px-6 lg:mt-8 lg:px-8">
-        <div className="h-0.5 overflow-hidden rounded-full bg-jet-black/10" aria-hidden="true">
+        <div className="h-0.5 overflow-hidden rounded-full bg-berlin-blue/15" aria-hidden="true">
           <div
-            className="h-full origin-left rounded-full bg-jet-black transition-transform duration-500 ease-out-quint"
+            className="h-full origin-left rounded-full bg-berlin-blue transition-transform duration-500 ease-out-quint"
             style={{ transform: `scaleX(${(active + 1) / COUNT})` }}
           />
         </div>

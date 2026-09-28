@@ -115,7 +115,7 @@ export function IntroDoor() {
       </div>
       <button
         type="button"
-        className="intro-skip pointer-events-auto inline-flex min-h-11 cursor-pointer items-center rounded-xl border border-jet-black/15 bg-white px-4 text-[0.9375rem] font-semibold text-jet-black shadow-product transition-colors duration-200 hover:border-berlin-blue hover:text-berlin-blue"
+        className="intro-skip pointer-events-auto inline-flex min-h-11 cursor-pointer items-center rounded-xl border border-berlin-blue/20 bg-white px-4 text-[0.9375rem] font-semibold text-berlin-blue-dark shadow-product transition-colors duration-200 hover:border-berlin-blue hover:text-berlin-blue"
         onClick={open}
       >
         Lewati intro

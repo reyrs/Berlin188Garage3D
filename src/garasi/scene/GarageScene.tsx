@@ -352,7 +352,7 @@ function ExplodedHotspots({ carY }: { carY: number }) {
                   className={`flex items-center gap-2 rounded-full px-3 py-1.5 backdrop-blur-md border shadow-float cursor-pointer transition-all duration-300 ${
                     isOpen
                       ? 'bg-berlin-red border-white text-white scale-105'
-                      : 'bg-jet-black/85 border-cloud-white/20 text-cloud-white hover:border-berlin-red hover:scale-105'
+                      : 'bg-berlin-blue-dark/85 border-cloud-white/20 text-cloud-white hover:border-berlin-red hover:scale-105'
                   }`}
                   aria-label={`Lihat detail ${spot.name}`}
                 >
@@ -363,7 +363,7 @@ function ExplodedHotspots({ carY }: { carY: number }) {
                   <span className="text-xs font-bold whitespace-nowrap">{spot.name}</span>
                 </button>
                 {isOpen && (
-                  <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 w-64 rounded-xl bg-jet-black/95 p-3.5 backdrop-blur-lg border border-cloud-white/15 shadow-2xl text-left z-50">
+                  <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 w-64 rounded-xl bg-berlin-blue-dark/95 p-3.5 backdrop-blur-lg border border-cloud-white/15 shadow-2xl text-left z-50">
                     <p className="spec-label text-berlin-blue-light text-[0.65rem]">{spot.category}</p>
                     <p className="mt-1 font-bold text-sm text-cloud-white">{spot.name}</p>
                     <p className="mt-1 text-xs text-cloud-white/80 leading-relaxed">{spot.desc}</p>

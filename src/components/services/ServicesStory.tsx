@@ -76,7 +76,7 @@ export function ServicesStory() {
             <h2 className="brand-headline text-[clamp(2rem,4vw,3.5rem)] leading-[0.98]">
               Dari mesin sampai <span className="brand-emphasis mt-[0.1em]">towing</span>
             </h2>
-            <p className="mt-5 max-w-md text-base leading-relaxed text-jet-black/75 sm:text-lg">
+            <p className="mt-5 max-w-md text-base leading-relaxed text-berlin-blue-dark/80 sm:text-lg">
               Empat belas layanan untuk mobil Eropa Anda, dikerjakan di satu bengkel.
             </p>
           </div>
@@ -98,7 +98,7 @@ export function ServicesStory() {
               >
                 {service.name}
               </h3>
-              <p className="mt-3 leading-relaxed text-jet-black/75">{service.description}</p>
+              <p className="mt-3 leading-relaxed text-berlin-blue-dark/80">{service.description}</p>
               <ServicePhoto service={service} />
               <a
                 href={serviceInquiryLink(service.name)}

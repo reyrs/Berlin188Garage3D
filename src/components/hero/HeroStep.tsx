@@ -81,7 +81,7 @@ export function HeroStep() {
     >
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-xl">
-          <p data-hero-reveal className="hero-eyebrow spec-label text-jet-black/70">
+          <p data-hero-reveal className="hero-eyebrow spec-label text-berlin-blue-dark/75">
             {HERO.eyebrow}
           </p>
           <h1 data-hero-reveal className="brand-headline mt-5 text-[clamp(2.4rem,5.2vw,5rem)] leading-[0.95]">
@@ -90,7 +90,7 @@ export function HeroStep() {
               <span className="hero-split">{HERO.headlineEmphasis}</span>
             </span>
           </h1>
-          <p data-hero-reveal className="hero-sub mt-6 max-w-md text-base leading-relaxed text-jet-black/75 sm:text-lg">
+          <p data-hero-reveal className="hero-sub mt-6 max-w-md text-base leading-relaxed text-berlin-blue-dark/80 sm:text-lg">
             {HERO.subtitle}
           </p>
           <div data-hero-reveal className="hero-ctas mt-8 flex flex-wrap items-center gap-3">

@@ -5,7 +5,7 @@ import { ButtonLink } from '../ui/ButtonLink';
 
 export function Footer() {
   return (
-    <footer id="lokasi" className="bg-jet-black text-cloud-white">
+    <footer id="lokasi" className="bg-berlin-blue-dark text-cloud-white">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
         <div className="grid gap-12 md:grid-cols-[1.3fr_1fr_1fr]">
           <div>

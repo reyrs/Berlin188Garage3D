@@ -40,7 +40,7 @@ export function Header({ links, logoHref = '#top', current }: HeaderProps) {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 text-cloud-white transition-[background-color,box-shadow] duration-300 ease-out-quint ${
-        overTop ? 'bg-jet-black/0' : 'bg-jet-black shadow-[0_1px_0_rgb(244_246_255/0.08)]'
+        overTop ? 'bg-berlin-blue-dark/0' : 'bg-berlin-blue-dark/95 backdrop-blur-md shadow-[0_1px_0_rgb(244_246_255/0.12)]'
       }`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">

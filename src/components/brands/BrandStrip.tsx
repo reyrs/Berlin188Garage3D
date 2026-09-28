@@ -25,12 +25,12 @@ export function BrandStrip() {
         {/* A solid card like the service cards: the strip scrolls across the
             car on phones and has to stay legible wherever it stops. */}
         <div data-reveal className="w-full rounded-card bg-white p-5 shadow-float sm:p-7 lg:max-w-[26rem]">
-          <h2 id="merek-title" className="text-sm font-semibold text-jet-black/70">
+          <h2 id="merek-title" className="text-sm font-semibold text-berlin-blue-dark/75">
             Merek yang kami servis
           </h2>
           <ul
             role="list"
-            className="mt-5 flex items-center justify-between gap-3 text-jet-black/65 [--mark:1.75rem] sm:[--mark:2.125rem]"
+            className="mt-5 flex items-center justify-between gap-3 text-berlin-blue-dark/70 [--mark:1.75rem] sm:[--mark:2.125rem]"
           >
             {BRAND_MARKS.map((mark) => (
               <li key={mark.id} className="flex">

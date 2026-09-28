@@ -12,7 +12,7 @@ const VARIANTS: Record<Variant, string> = {
   // White on Berlin Blue = 5.8:1, passes AA at any size.
   primary: 'bg-berlin-blue text-white shadow-product hover:bg-berlin-blue-dark active:bg-berlin-blue-dark',
   secondary:
-    'bg-white text-jet-black border border-jet-black/15 hover:border-berlin-blue hover:text-berlin-blue',
+    'bg-white text-berlin-blue-dark border border-berlin-blue/20 hover:border-berlin-blue hover:text-berlin-blue',
   'on-dark': 'border border-cloud-white/35 text-cloud-white hover:border-cloud-white hover:bg-cloud-white/10',
 };
 

@@ -5,7 +5,7 @@ export const BRAND = {
   blue: '#0065C0',
   red: '#F9000D',
   cloudWhite: '#F4F6FF',
-  jetBlack: '#181818',
+  jetBlack: '#002D5A',
 } as const;
 
 const standard = (name: string, params: THREE.MeshStandardMaterialParameters) =>

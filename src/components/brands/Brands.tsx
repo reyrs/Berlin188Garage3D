@@ -22,7 +22,7 @@ export function Brands() {
   const controls = { active, count: COUNT, onPrev: () => goTo(active - 1), onNext: () => goTo(active + 1), noun: 'Merek' };
 
   return (
-    <section id="merek" aria-labelledby="merek-title" aria-roledescription="carousel" className="scroll-mt-16 overflow-hidden bg-jet-black py-20 text-cloud-white lg:py-28">
+    <section id="merek" aria-labelledby="merek-title" aria-roledescription="carousel" className="scroll-mt-16 overflow-hidden bg-berlin-blue-dark py-20 text-cloud-white lg:py-28">
       <div className="mx-auto flex max-w-7xl items-end justify-between gap-6 px-4 sm:px-6 lg:px-8">
         <header data-reveal className="max-w-2xl">
           <p className="spec-label text-cloud-white/70">Spesialis mobil Eropa</p>
@@ -45,7 +45,7 @@ export function Brands() {
             }`}
           >
             <BrandPicture car={car} />
-            <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-jet-black/90 via-jet-black/25 to-jet-black/0" />
+            <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-berlin-blue-dark/95 via-berlin-blue-dark/40 to-transparent" />
             <div
               className={`absolute inset-x-5 bottom-5 transition-[opacity,translate] duration-500 ease-out-quint sm:inset-x-8 sm:bottom-8 lg:inset-x-10 lg:bottom-10 ${
                 i === active ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'

@@ -15,35 +15,30 @@ import { CurveAccent } from '../ui/CurveAccent';
 import { ScrubVideo } from '../media/ScrubVideo';
 
 const COUNT = ANATOMY.length;
-/** Timeline position (units) where each scene starts to come in. */
-const AT = [0, 1.2, 2.5, 3.6, 4.7, 6];
-/** Timeline length in units, including a short hold on the last scene. */
-const UNITS = 7;
-/** Scroll distance per timeline unit. */
-const UNIT_SVH = 45;
-/** Crossfade length between scenes. */
-const FADE = 0.2;
-const activeAt = (t: number) => AT.reduce((n, at, i) => (t >= at + FADE / 2 ? i : n), 0);
+/** Timeline position (in seconds) where each scene starts to come in. */
+const AT = [0, 4.5, 9.0, 14.0, 18.5, 23.0];
+/** Total duration of one auto-animation cycle in seconds. */
+const TOTAL_DURATION = 28.0;
+/** Crossfade length between scenes in seconds. */
+const FADE = 0.55;
 const pad = (n: number) => String(n).padStart(2, '0');
 const WIDTHS = [960, 1600, 2400];
 const SIZES = '(min-width: 64rem) 76vw, 112vw';
 
 /**
- * The home page hero and its scroll story ("Anatomi servis"), one pinned
- * section. The hero copy, booking and the makes sit beside a BMW whose
- * showroom goes dark as you scroll; then the car comes apart, gets read down
- * to its modules and comes back together. Video scenes play frame by frame
- * with the scroll; stills push in and pin hotspots that link to the services.
+ * The home page hero and its auto animation ("Anatomi servis").
+ * The hero copy, booking and the makes sit beside the car; the car comes
+ * apart, gets read down to its modules and comes back together automatically.
  */
 export function Anatomy() {
   const rootRef = useRef<HTMLElement>(null);
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
   const reducedMotion = useReducedMotion();
   const introOpen = useIntroOpen();
   const [active, setActive] = useState(0);
-  const [near, setNear] = useState(false);
+  const [near, setNear] = useState(true);
   const [scrubbers] = useState(() => ANATOMY.map(() => new ScrubController()));
 
-  // Clips load once the section is on (or about a screen from) the screen.
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
@@ -119,7 +114,7 @@ export function Anatomy() {
     };
   }, [introOpen, reducedMotion]);
 
-  // The scroll story. Transforms and opacity only, so it stays on the compositor.
+  // The auto-playing animation loop.
   useGSAP(
     () => {
       const root = rootRef.current;
@@ -128,60 +123,77 @@ export function Anatomy() {
       const scenes = q('[data-scene]');
       const captions = q('[data-anatomi-caption]');
 
-      const tl = gsap.timeline({
-        defaults: { ease: 'none' },
-        scrollTrigger: {
-          trigger: root,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: true,
-          onUpdate: (self) => {
-            const t = self.progress * UNITS;
-            setActive(activeAt(t));
-            ANATOMY.forEach((scene, i) => {
-              if (scene.kind !== 'video') return;
-              const start = AT[i] + (i ? FADE / 2 : 0);
-              const end = AT[i + 1] ?? UNITS;
-              scrubbers[i].setProgress((t - start) / (end - start));
-            });
-          },
-        },
-      });
-
       gsap.set([...scenes.slice(1), ...captions.slice(1), q('.anatomi-cta')], { autoAlpha: 0 });
 
       if (reducedMotion) {
-        // Same story as instant cuts; nothing moves by itself.
-        for (let i = 1; i < COUNT; i++) {
-          const at = AT[i] + FADE / 2;
-          tl.set([scenes[i - 1], captions[i - 1]], { autoAlpha: 0 }, at).set([scenes[i], captions[i]], { autoAlpha: 1 }, at);
-        }
-        tl.set(q('.anatomi-cta'), { autoAlpha: 1 }, AT[COUNT - 1] + FADE / 2);
-      } else {
-        for (let i = 1; i < COUNT; i++) {
-          const at = AT[i];
-          tl.to(captions[i - 1], { autoAlpha: 0, y: -28, duration: FADE, ease: 'power1.in' }, at - FADE / 2)
-            .to(scenes[i - 1], { autoAlpha: 0, duration: FADE }, at)
-            .fromTo(scenes[i], { autoAlpha: 0 }, { autoAlpha: 1, duration: FADE }, at)
-            .fromTo(captions[i], { autoAlpha: 0, y: 32 }, { autoAlpha: 1, y: 0, duration: 0.25, ease: 'power2.out' }, at + FADE);
-        }
-        // Stills drift in slowly, then pin their hotspots one by one.
-        ANATOMY.forEach((scene, i) => {
-          if (scene.kind !== 'still') return;
-          const end = AT[i + 1] ?? UNITS;
-          tl.fromTo(scenes[i].querySelector('[data-still]'), { scale: 1.08 }, { scale: 1, duration: end - AT[i], ease: 'power1.out' }, AT[i]);
-          const pins = scenes[i].querySelectorAll('[data-hotspot]');
-          if (pins.length) {
-            tl.fromTo(pins, { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 1, scale: 1, duration: 0.12, stagger: 0.1, ease: 'back.out(2)' }, AT[i] + 0.3);
-          }
-        });
-        // The diagnostic scan sweeps across the x-ray.
-        const xray = ANATOMY.findIndex((s) => s.id === 'xray');
-        tl.fromTo(q('.anatomi-scan'), { xPercent: -100 }, { xPercent: 560, duration: 0.8, ease: 'power1.inOut' }, AT[xray] + 0.1);
-        tl.fromTo(q('.anatomi-cta'), { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.25, ease: 'power2.out' }, AT[COUNT - 1] + 0.3);
+        return;
       }
-      // Pad to the full length so timeline units match the section height.
-      tl.set({}, {}, UNITS);
+
+      const tl = gsap.timeline({
+        repeat: -1,
+        defaults: { ease: 'none' },
+        onUpdate: () => {
+          const t = tl.totalTime() % TOTAL_DURATION;
+          let current = 0;
+          for (let i = COUNT - 1; i >= 0; i--) {
+            if (t >= AT[i] - FADE / 2) {
+              current = i;
+              break;
+            }
+          }
+          setActive(current);
+
+          ANATOMY.forEach((scene, i) => {
+            if (scene.kind !== 'video') return;
+            const start = AT[i];
+            const end = AT[i + 1] ?? TOTAL_DURATION;
+            if (t >= start && t <= end) {
+              const p = (t - start) / (end - start);
+              scrubbers[i].setProgress(p);
+            }
+          });
+        },
+      });
+
+      tlRef.current = tl;
+
+      for (let i = 1; i < COUNT; i++) {
+        const at = AT[i];
+        tl.to(captions[i - 1], { autoAlpha: 0, y: -24, duration: FADE, ease: 'power1.in' }, at - FADE / 2)
+          .to(scenes[i - 1], { autoAlpha: 0, duration: FADE }, at - FADE / 2)
+          .fromTo(scenes[i], { autoAlpha: 0 }, { autoAlpha: 1, duration: FADE }, at)
+          .fromTo(captions[i], { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power2.out' }, at + FADE * 0.3);
+      }
+
+      // Stills drift in slowly, then pin their hotspots one by one.
+      ANATOMY.forEach((scene, i) => {
+        if (scene.kind !== 'still') return;
+        const start = AT[i];
+        const end = AT[i + 1] ?? TOTAL_DURATION;
+        const stillEl = scenes[i].querySelector('[data-still]');
+        if (stillEl) {
+          tl.fromTo(stillEl, { scale: 1.06 }, { scale: 1, duration: end - start, ease: 'power1.out' }, start);
+        }
+        const pins = scenes[i].querySelectorAll('[data-hotspot]');
+        if (pins.length) {
+          tl.fromTo(pins, { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 1, scale: 1, duration: 0.25, stagger: 0.12, ease: 'back.out(2)' }, start + 0.3);
+        }
+      });
+
+      // The diagnostic scan sweeps across the x-ray.
+      const xray = ANATOMY.findIndex((s) => s.id === 'xray');
+      if (xray >= 0) {
+        tl.fromTo(q('.anatomi-scan'), { xPercent: -100 }, { xPercent: 560, duration: 1.8, ease: 'power1.inOut' }, AT[xray] + 0.2);
+      }
+      tl.fromTo(q('.anatomi-cta'), { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power2.out' }, AT[COUNT - 1] + 0.3);
+
+      // Loop back from the last scene to the first scene.
+      tl.to(captions[COUNT - 1], { autoAlpha: 0, y: -24, duration: FADE, ease: 'power1.in' }, TOTAL_DURATION - FADE)
+        .to(scenes[COUNT - 1], { autoAlpha: 0, duration: FADE }, TOTAL_DURATION - FADE)
+        .to(scenes[0], { autoAlpha: 1, duration: FADE }, TOTAL_DURATION - FADE)
+        .to(captions[0], { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power2.out' }, TOTAL_DURATION - FADE * 0.4);
+
+      tl.set({}, {}, TOTAL_DURATION);
     },
     { scope: rootRef, dependencies: [reducedMotion], revertOnUpdate: true },
   );
@@ -191,10 +203,9 @@ export function Anatomy() {
       ref={rootRef}
       id="top"
       aria-labelledby="hero-title"
-      className="anatomi relative bg-jet-black text-cloud-white"
-      style={{ height: `calc(100svh + ${UNITS * UNIT_SVH}svh)` }}
+      className="anatomi relative h-[100svh] min-h-[640px] overflow-hidden bg-berlin-blue-dark text-cloud-white"
     >
-      <div className="sticky top-0 h-[100svh] overflow-hidden">
+      <div className="relative h-full w-full overflow-hidden">
         {/* Stage: one 16:9 box whose edges fade into the page. Decorative; the
             hotspot links are pointer shortcuts (the services are linked below). */}
         <div aria-hidden="true" className="anatomi-stage">
@@ -205,7 +216,7 @@ export function Anatomy() {
                   <VideoScene
                     slot={scene.slot}
                     scrubber={scrubbers[i]}
-                    load={near && !reducedMotion && Math.abs(i - active) <= 1}
+                    load={near && !reducedMotion}
                     priority={i === 0}
                   />
                 </div>
@@ -228,13 +239,13 @@ export function Anatomy() {
         </div>
 
         {/* Lights off until the entrance switches them on. */}
-        <div aria-hidden="true" className="hero-dim pointer-events-none absolute inset-0 bg-jet-black" />
+        <div aria-hidden="true" className="hero-dim pointer-events-none absolute inset-0 bg-berlin-blue-dark" />
 
         {/* Scrims keep the copy legible where it sits over the stage. */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-x-0 top-0 h-28 bg-linear-to-b from-jet-black/85 to-jet-black/0" />
-          <div className="absolute inset-x-0 bottom-0 h-[58%] bg-linear-to-t from-jet-black via-jet-black/90 to-jet-black/0 lg:hidden" />
-          <div className="absolute inset-y-0 left-0 hidden w-[42%] bg-linear-to-r from-jet-black via-jet-black/70 to-jet-black/0 lg:block" />
+          <div className="absolute inset-x-0 top-0 h-28 bg-linear-to-b from-berlin-blue-dark/85 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-[58%] bg-linear-to-t from-berlin-blue-dark via-berlin-blue-dark/90 to-transparent lg:hidden" />
+          <div className="absolute inset-y-0 left-0 hidden w-[42%] bg-linear-to-r from-berlin-blue-dark via-berlin-blue-dark/70 to-transparent lg:block" />
         </div>
 
         <div className="pointer-events-none relative mx-auto h-full max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -329,31 +340,37 @@ export function Anatomy() {
             })}
           </div>
 
-          {/* Rail: counter, a way out of the story, and the step names with the active one lit. */}
+          {/* Rail: counter and the step names with the active one lit. */}
           <div className="anatomi-rail pointer-events-auto absolute inset-x-4 bottom-6 flex items-end justify-between gap-4 sm:inset-x-6 lg:inset-x-8 lg:bottom-8">
             <div className="flex items-end gap-4 sm:gap-6">
               <p aria-hidden="true" className="spec-label whitespace-nowrap tabular-nums text-cloud-white/80">
                 <span className="text-cloud-white">{pad(active + 1)}</span> / {pad(COUNT)}
               </p>
-              <a href="#layanan" className="spec-label -my-3 inline-flex items-center gap-1.5 py-3 whitespace-nowrap text-cloud-white/70 transition-colors hover:text-cloud-white">
-                Lewati<span className="max-sm:hidden"> animasi</span>
-                <ArrowDown weight="bold" size={14} aria-hidden="true" />
-              </a>
             </div>
             <ol aria-hidden="true" className="flex items-end gap-2.5 sm:gap-5">
               {ANATOMY.map((scene, i) => (
-                <li key={scene.id} className="flex flex-col items-center gap-2">
-                  <span
-                    className={`spec-label hidden text-[0.6875rem] transition-opacity duration-300 md:block ${
-                      i === active ? 'text-cloud-white opacity-100' : 'text-cloud-white opacity-40'
-                    }`}
+                <li key={scene.id}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (tlRef.current) {
+                        tlRef.current.seek(AT[i]);
+                      }
+                    }}
+                    className="flex cursor-pointer flex-col items-center gap-2"
                   >
-                    {scene.rail}
-                  </span>
-                  <span
-                    className={`block size-1.5 rounded-full bg-cloud-white transition-opacity duration-300 md:hidden ${i === active ? 'opacity-100' : 'opacity-35'}`}
-                  />
-                  <CurveAccent className={`h-1.5 w-4 transition-opacity duration-300 sm:w-6 ${i === active ? 'opacity-100' : 'opacity-0'}`} />
+                    <span
+                      className={`spec-label hidden text-[0.6875rem] transition-opacity duration-300 md:block ${
+                        i === active ? 'text-cloud-white opacity-100' : 'text-cloud-white opacity-40'
+                      }`}
+                    >
+                      {scene.rail}
+                    </span>
+                    <span
+                      className={`block size-1.5 rounded-full bg-cloud-white transition-opacity duration-300 md:hidden ${i === active ? 'opacity-100' : 'opacity-35'}`}
+                    />
+                    <CurveAccent className={`h-1.5 w-4 transition-opacity duration-300 sm:w-6 ${i === active ? 'opacity-100' : 'opacity-0'}`} />
+                  </button>
                 </li>
               ))}
             </ol>
@@ -430,12 +447,12 @@ function HotspotPin({ spot }: { spot: Hotspot }) {
       className="group absolute"
       style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
     >
-      <span className="absolute -top-2 -left-2 block size-4 rounded-full border-2 border-berlin-red bg-jet-black/60 before:absolute before:-inset-3 before:content-['']">
+      <span className="absolute -top-2 -left-2 block size-4 rounded-full border-2 border-berlin-red bg-berlin-blue-dark/80 before:absolute before:-inset-3 before:content-['']">
         <span className="absolute inset-[3px] rounded-full bg-cloud-white" />
         <span className="absolute -inset-1 rounded-full border border-berlin-red/60 motion-safe:animate-ping" />
       </span>
       <span
-        className={`spec-label absolute top-0 hidden -translate-y-1/2 rounded-lg bg-jet-black/85 px-2.5 py-1.5 text-[0.6875rem] whitespace-nowrap text-cloud-white ring-1 ring-cloud-white/15 transition-colors group-hover:bg-berlin-blue group-hover:ring-berlin-blue lg:block ${
+        className={`spec-label absolute top-0 hidden -translate-y-1/2 rounded-lg bg-berlin-blue-dark/90 px-2.5 py-1.5 text-[0.6875rem] whitespace-nowrap text-cloud-white ring-1 ring-cloud-white/15 transition-colors group-hover:bg-berlin-blue group-hover:ring-berlin-blue lg:block ${
           spot.flip ? 'right-4' : 'left-4'
         }`}
       >

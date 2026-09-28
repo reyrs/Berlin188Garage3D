@@ -15,7 +15,23 @@
   --color-berlin-red-light: #FB3340;
   --color-berlin-gold: #D4A017;
   --color-cloud-white: #F4F6FF;
-  --color-jet-black: #181818;
+  --color-jet-black: #002D5A;
+  --color-berlin-blue-deep: #04152D;
+
+  --color-slate-50: #F8FAFC;
+  --color-slate-100: #F1F5F9;
+  --color-slate-200: #E2E8F0;
+  --color-slate-300: #CBD5E1;
+  --color-slate-400: #94A3B8;
+  --color-slate-500: #64748B;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1E293B;
+  --color-slate-900: #0F172A;
+
+  --color-emerald-500: #10B981;
+  --color-emerald-600: #059669;
+  --color-amber-500: #F59E0B;
 
   --font-sans: "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Poppins", "Instrument Sans Variable", ui-sans-serif, sans-serif;
@@ -24,7 +40,7 @@
   --radius-media: 0.75rem;
 
   --shadow-product: 0 8px 20px -4px rgb(0 101 192 / 0.10), 0 2px 6px -2px rgb(0 101 192 / 0.06);
-  --shadow-float: 0 18px 40px -12px rgb(0 101 192 / 0.18), 0 4px 10px -4px rgb(24 24 24 / 0.08);
+  --shadow-float: 0 18px 40px -12px rgb(0 101 192 / 0.18), 0 4px 10px -4px rgb(0 45 90 / 0.08);
 
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
@@ -33,13 +49,13 @@
 @layer base {
   html {
     color-scheme: light;
-    /* Overscroll above the hero and below the footer stays dark. */
-    background-color: var(--color-jet-black);
+    /* Overscroll above the hero and below the footer stays blue. */
+    background-color: var(--color-berlin-blue-dark);
     -webkit-text-size-adjust: 100%;
   }
   body {
     background-color: var(--color-cloud-white);
-    color: var(--color-jet-black);
+    color: var(--color-berlin-blue-dark);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -112,18 +128,17 @@
   display: grid;
   place-items: center;
   pointer-events: auto;
-  background-color: var(--color-jet-black);
-  /* Door slats every 56px (a groove and a hairline highlight) under a soft
-     top-lit falloff; black and white alpha only, no new colours. */
+  background-color: var(--color-berlin-blue-dark);
+  /* Door slats every 56px under a soft top-lit falloff with Berlin Blue tone */
   background-image:
-    radial-gradient(120% 70% at 50% 0%, rgb(255 255 255 / 0.07), transparent 62%),
+    radial-gradient(120% 70% at 50% 0%, rgb(255 255 255 / 0.12), transparent 62%),
     repeating-linear-gradient(
       to bottom,
       transparent 0 54px,
-      rgb(0 0 0 / 0.55) 54px 55px,
-      rgb(255 255 255 / 0.045) 55px 56px
+      rgb(0 50 110 / 0.6) 54px 55px,
+      rgb(255 255 255 / 0.08) 55px 56px
     );
-  box-shadow: 0 30px 60px -10px rgb(0 0 0 / 0.6);
+  box-shadow: 0 30px 60px -10px rgb(0 35 80 / 0.7);
   will-change: transform;
 }
 .garage-door__panel::after {
@@ -132,8 +147,8 @@
   position: absolute;
   inset: auto 0 0 0;
   height: 18px;
-  background: linear-gradient(to bottom, rgb(255 255 255 / 0.06), rgb(0 0 0 / 0.5));
-  border-top: 1px solid rgb(255 255 255 / 0.08);
+  background: linear-gradient(to bottom, rgb(255 255 255 / 0.08), rgb(0 40 90 / 0.6));
+  border-top: 1px solid rgb(255 255 255 / 0.12);
 }
 /* Light from the lit showroom leaking through the gap under the door. */
 .garage-door__seam {

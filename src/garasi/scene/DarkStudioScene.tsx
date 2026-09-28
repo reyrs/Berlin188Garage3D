@@ -99,7 +99,7 @@ function DarkStudioFloor() {
       {/* Dark showroom floor plane */}
       <mesh rotation-x={-Math.PI / 2} receiveShadow>
         <planeGeometry args={[80, 80]} />
-        <meshStandardMaterial color="#0a0a0d" roughness={0.42} metalness={0.25} />
+        <meshStandardMaterial color="#061a38" roughness={0.42} metalness={0.25} />
       </mesh>
 
       {/* Signature Berlin Red subtle circular turntable track */}
@@ -109,7 +109,7 @@ function DarkStudioFloor() {
       </mesh>
 
       {/* Lightweight contact shadow under the car */}
-      <ContactShadows position={[0, 0.001, 0]} scale={11} blur={2.2} far={1.6} opacity={0.78} resolution={512} color="#000000" />
+      <ContactShadows position={[0, 0.001, 0]} scale={11} blur={2.2} far={1.6} opacity={0.78} resolution={512} color="#020b18" />
     </group>
   );
 }
@@ -263,7 +263,7 @@ function StudioHotspots({
                 className={`group relative flex h-7 w-7 items-center justify-center rounded-full transition-all duration-300 cursor-pointer ${
                   isSelected
                     ? 'bg-berlin-red ring-4 ring-berlin-red/40 scale-125 shadow-[0_0_20px_rgb(249_0_13/0.8)]'
-                    : 'bg-jet-black/85 border border-cloud-white/40 hover:border-berlin-red hover:scale-125 hover:bg-jet-black shadow-lg'
+                    : 'bg-berlin-blue-dark/90 border border-cloud-white/40 hover:border-berlin-red hover:scale-125 hover:bg-berlin-blue shadow-lg'
                 }`}
                 aria-label={`Inspeksi ${spot.name}`}
               >
@@ -278,7 +278,7 @@ function StudioHotspots({
                 />
 
                 {/* Micro tooltip on hover */}
-                <span className="pointer-events-none absolute left-1/2 -top-8 -translate-x-1/2 whitespace-nowrap rounded-md bg-jet-black/95 px-2.5 py-1 text-[11px] font-medium text-cloud-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 border border-cloud-white/20 shadow-xl z-50">
+                <span className="pointer-events-none absolute left-1/2 -top-8 -translate-x-1/2 whitespace-nowrap rounded-md bg-berlin-blue-dark/95 px-2.5 py-1 text-[11px] font-medium text-cloud-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 border border-cloud-white/20 shadow-xl z-50">
                   {spot.name}
                 </span>
               </button>
@@ -399,10 +399,10 @@ export function DarkStudioScene({
       onCreated={({ gl, scene }) => {
         gl.toneMapping = THREE.NeutralToneMapping;
         gl.toneMappingExposure = 1.05;
-        scene.background = new THREE.Color('#08080a');
+        scene.background = new THREE.Color('#04152d');
       }}
     >
-      <fog attach="fog" args={['#08080a', 15, 45]} />
+      <fog attach="fog" args={['#04152d', 15, 45]} />
       <DarkStudioLighting />
       <DarkStudioFloor />
 
