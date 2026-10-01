@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react';
-import { WhatsappLogo } from '@phosphor-icons/react';
+import { WhatsappLogo, ShieldCheck } from '@phosphor-icons/react';
 import { bookingLink } from '../../lib/whatsapp';
 import { ScrollTrigger } from '../../lib/gsap';
-import { ButtonLink } from '../ui/ButtonLink';
 
 /**
- * Phones only: a booking button pinned to the bottom of the screen between
- * the end of the hero story (#top) and the footer (#lokasi), which have
- * booking buttons of their own.
+ * Phones only: a luxury floating bottom dock pinned to the bottom of the screen between
+ * the end of the hero story (#top) and the footer (#lokasi).
+ * Provides dual quick action: Instant WhatsApp Booking + Live Car Service Tracker (Cek Servis).
  */
 export function MobileBookingBar() {
   const [pastHero, setPastHero] = useState(false);
   const [atFooter, setAtFooter] = useState(false);
 
   useEffect(() => {
-    // Progress, not onToggle, so a jump (anchor link, restored scroll) still counts.
     const hero = ScrollTrigger.create({
       trigger: '#top',
       start: 'top top',
@@ -37,15 +35,39 @@ export function MobileBookingBar() {
   const show = pastHero && !atFooter;
 
   return (
-    <div
-      className={`fixed inset-x-0 bottom-0 z-40 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-[translate,opacity,visibility] duration-300 ease-out-quint lg:hidden ${
-        show ? 'visible translate-y-0 opacity-100' : 'invisible translate-y-full opacity-0'
+    <aside
+      aria-label="Aksi Cepat Mobile"
+      className={`fixed inset-x-0 bottom-0 z-40 transition-[translate,opacity,visibility] duration-300 ease-out-quint lg:hidden ${
+        show ? 'visible translate-y-0 opacity-100' : 'invisible translate-y-full opacity-0 pointer-events-none'
       }`}
     >
-      <ButtonLink href={bookingLink()} external className="w-full shadow-float">
-        <WhatsappLogo weight="duotone" size={22} aria-hidden="true" />
-        Booking via WhatsApp
-      </ButtonLink>
-    </div>
+      <div className="mx-auto max-w-md px-3 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        <div className="flex items-center gap-2 rounded-2xl bg-berlin-blue-dark/90 p-1.5 backdrop-blur-xl border border-white/15 shadow-[0_12px_32px_rgba(0,45,90,0.45)]">
+          {/* Quick Cek Servis jump */}
+          <a
+            href="#cek-servis"
+            className="flex h-11 items-center justify-center gap-1.5 rounded-xl bg-white/10 px-3.5 text-xs font-bold text-white transition-colors active:bg-white/20 shrink-0"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+            </span>
+            <ShieldCheck className="h-4 w-4 text-emerald-400" weight="bold" />
+            <span>Cek Servis</span>
+          </a>
+
+          {/* Primary WhatsApp Booking Action */}
+          <a
+            href={bookingLink()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-berlin-blue px-3 text-xs sm:text-sm font-bold text-white shadow-product active:bg-berlin-blue-dark transition-all"
+          >
+            <WhatsappLogo weight="duotone" size={20} aria-hidden="true" />
+            <span className="truncate">Booking Servis via WA</span>
+          </a>
+        </div>
+      </div>
+    </aside>
   );
 }

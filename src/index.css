@@ -11,9 +11,13 @@
   --color-berlin-blue: #0065C0;
   --color-berlin-blue-dark: #004D99;
   --color-berlin-blue-light: #1A7FDA;
+  --color-berlin-navy: #0065C0;
+  --color-berlin-navy-dark: #004D99;
+  --color-berlin-navy-light: #1A7FDA;
   --color-berlin-red: #F9000D;
   --color-berlin-red-light: #FB3340;
   --color-berlin-gold: #D4A017;
+  --color-berlin-gold-light: #E8C547;
   --color-cloud-white: #F4F6FF;
   --color-jet-black: #002D5A;
   --color-berlin-blue-deep: #04152D;
@@ -28,10 +32,18 @@
   --color-slate-700: #334155;
   --color-slate-800: #1E293B;
   --color-slate-900: #0F172A;
+  --color-slate-950: #080D1A;
+  --color-black: #000000;
 
+  --color-emerald-400: #34D399;
   --color-emerald-500: #10B981;
   --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+
+  --color-amber-400: #FBBF24;
   --color-amber-500: #F59E0B;
+  --color-amber-600: #D97706;
+  --color-amber-700: #B45309;
 
   --font-sans: "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Poppins", "Instrument Sans Variable", ui-sans-serif, sans-serif;
