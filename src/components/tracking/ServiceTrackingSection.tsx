@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo } from 'react';
 import {
   MagnifyingGlass,
   X,
@@ -14,8 +14,6 @@ import {
   ListChecks,
   Cpu,
   Sparkle,
-  DeviceMobile,
-  ClipboardText,
 } from '@phosphor-icons/react';
 import { DEMO_ORDERS, type ServiceOrder, type ServiceFinding } from '../../data/tracking';
 import { formatRupiah } from '../../lib/marketplace';
@@ -30,11 +28,6 @@ const STEPS = [
 ];
 
 export function ServiceTrackingSection() {
-  const portalRef = useRef<HTMLDivElement>(null);
-
-  // Phone Mockup interactive state (matching berlin188.com)
-  const [mockupStatus, setMockupStatus] = useState<'pending' | 'approved' | 'rejected'>('pending');
-
   // Search portal state
   const [query, setQuery] = useState('B 188 BR');
   const [searchedOrder, setSearchedOrder] = useState<ServiceOrder | null>(() => DEMO_ORDERS[0]);
@@ -44,10 +37,6 @@ export function ServiceTrackingSection() {
 
   // Local state for customer approval decisions in the portal
   const [findingsDecisions, setFindingsDecisions] = useState<Record<string, 'approved' | 'rejected'>>({});
-
-  const scrollToPortal = () => {
-    portalRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
 
   const handleSearch = (searchVal: string) => {
     const clean = searchVal.trim().toLowerCase().replace(/\s+/g, '');
@@ -162,294 +151,12 @@ export function ServiceTrackingSection() {
   return (
     <section id="cek-servis" className="relative bg-cloud-white py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-slate-200">
       <div className="mx-auto max-w-6xl space-y-16">
-        {/* ========================================================= */}
-        {/* 1. AUTHENTIC HERO SHOWCASE (Faithful to berlin188.com) */}
-        {/* ========================================================= */}
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* Left Column: Descriptive Text & Value Proposition */}
-          <div className="order-2 md:order-1">
-            <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-              Transparansi
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
-              Pantau langsung dari HP
-            </h2>
-            <p className="text-base text-slate-600 leading-relaxed mb-6">
-              Setiap temuan kami foto, setiap biaya kami jelaskan. Kamu tinggal pantau progress servis dari HP, kapan saja.
-            </p>
-
-            <div className="space-y-3 mb-8">
-              <div className="flex items-center gap-3 text-sm text-slate-700">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shrink-0">
-                  <Check className="h-3.5 w-3.5" weight="bold" />
-                </div>
-                <span>Foto makro & video temuan dikirim langsung dari ruang mesin</span>
-              </div>
-              <div className="flex items-center gap-3 text-sm text-slate-700">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shrink-0">
-                  <Check className="h-3.5 w-3.5" weight="bold" />
-                </div>
-                <span>Estimasi biaya suku cadang OES & jasa disetujui di awal (tanpa kejutan)</span>
-              </div>
-              <div className="flex items-center gap-3 text-sm text-slate-700">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shrink-0">
-                  <Check className="h-3.5 w-3.5" weight="bold" />
-                </div>
-                <span>Seluruh suku cadang lama yang diganti wajib diserahkan kembali</span>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                onClick={scrollToPortal}
-                className="inline-flex items-center gap-2.5 rounded-xl bg-berlin-blue hover:bg-berlin-blue-dark active:scale-[0.98] px-6 py-3.5 text-sm font-bold text-white shadow-md hover:shadow-lg transition-all cursor-pointer ring-2 ring-berlin-blue/20"
-              >
-                <ClipboardText className="h-5 w-5 text-white shrink-0" weight="bold" />
-                <span className="text-white font-bold tracking-wide">Cek Status Servis Saya</span>
-              </button>
-
-              <a
-                href={`https://wa.me/${SITE.whatsappNumber}?text=${encodeURIComponent(
-                  `Halo Berlin 188 Garage, saya ingin menanyakan status pengerjaan kendaraan saya.`
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 px-5 py-3.5 text-sm font-bold text-slate-700 transition-colors shadow-xs"
-              >
-                <WhatsappLogo className="h-4 w-4 text-emerald-600" weight="fill" />
-                <span>Tanya SA via WA</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Right Column: Realistic Smartphone Mockup */}
-          <div className="order-1 md:order-2 flex justify-center py-4">
-            <div className="relative w-full max-w-[340px]">
-              {/* Soft Ambient Background Glow */}
-              <div className="absolute -inset-2 bg-gradient-to-tr from-berlin-blue/20 to-berlin-gold/15 rounded-[44px] blur-xl opacity-75 pointer-events-none" />
-
-              {/* Floating WhatsApp Notification Pill (Top Right) */}
-              <div className="absolute -top-3 -right-2 sm:-right-6 z-30 bg-white border border-slate-200 pl-2.5 pr-3.5 py-2 rounded-2xl shadow-xl flex items-center gap-2.5 max-w-[220px]">
-                <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0">
-                  <WhatsappLogo className="w-4 h-4" weight="fill" />
-                </div>
-                <div className="text-left min-w-0">
-                  <p className="text-[11px] font-extrabold text-slate-900 leading-tight">Berlin 188 Garage</p>
-                  <p className="text-[11px] text-slate-600 leading-snug">3 foto temuan baru untuk mobil Anda</p>
-                </div>
-              </div>
-
-              {/* Realistic Smartphone Chassis */}
-              <div className="relative rounded-[42px] p-3 bg-[#0d1013] border-4 border-slate-700/60 shadow-2xl shadow-black/40">
-                {/* Dynamic Island / Top Notch */}
-                <div className="absolute top-5 left-1/2 -translate-x-1/2 w-24 h-4 bg-black rounded-full z-20 flex items-center justify-end px-2">
-                  <div className="w-2 h-2 rounded-full bg-[#1a1f26] border border-slate-700" />
-                </div>
-
-                {/* Smartphone Screen Content */}
-                <div className="bg-[#f8fafc] rounded-[32px] overflow-hidden pt-7 pb-4 px-4 space-y-3 border border-slate-200 text-left select-none">
-                  {/* Status Bar */}
-                  <div className="flex items-center justify-between text-[10px] text-slate-600 font-sans px-1">
-                    <span className="font-semibold">09:41</span>
-                    <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 font-bold text-[9px] px-1.5 py-0.5 rounded-full border border-emerald-200">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      LIVE TRACKING
-                    </span>
-                  </div>
-
-                  {/* Vehicle Header */}
-                  <div className="bg-white p-3 rounded-2xl border border-slate-150 shadow-xs">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-berlin-blue">
-                        Mercedes-Benz C200 • 2017
-                      </span>
-                      <span className="text-[9px] font-mono bg-slate-100 text-slate-700 font-bold px-1.5 py-0.5 rounded">
-                        B 188 BR
-                      </span>
-                    </div>
-
-                    {/* 5-Step Timeline Dots */}
-                    <ol className="mt-2.5 grid grid-cols-5 gap-1" aria-label="Progres servis">
-                      <li className="flex flex-col items-center gap-1">
-                        <span className="h-1.5 w-full rounded-full transition-colors duration-500 bg-emerald-500" />
-                        <span className="text-[9px] leading-none font-semibold text-slate-500">Check-in</span>
-                      </li>
-                      <li className="flex flex-col items-center gap-1">
-                        <span className="h-1.5 w-full rounded-full transition-colors duration-500 bg-emerald-500" />
-                        <span className="text-[9px] leading-none font-semibold text-slate-500">Diagnosis</span>
-                      </li>
-                      <li className="flex flex-col items-center gap-1">
-                        <span
-                          className={`h-1.5 w-full rounded-full transition-colors duration-500 ${
-                            mockupStatus === 'approved'
-                              ? 'bg-emerald-500'
-                              : mockupStatus === 'rejected'
-                              ? 'bg-slate-300'
-                              : 'bg-amber-400 animate-pulse'
-                          }`}
-                        />
-                        <span className="text-[9px] leading-none font-semibold text-slate-900">Setuju</span>
-                      </li>
-                      <li className="flex flex-col items-center gap-1">
-                        <span
-                          className={`h-1.5 w-full rounded-full transition-colors duration-500 ${
-                            mockupStatus === 'approved' ? 'bg-amber-400 animate-pulse' : 'bg-slate-200'
-                          }`}
-                        />
-                        <span className="text-[9px] leading-none font-semibold text-slate-500">Kerja</span>
-                      </li>
-                      <li className="flex flex-col items-center gap-1">
-                        <span className="h-1.5 w-full rounded-full transition-colors duration-500 bg-slate-200" />
-                        <span className="text-[9px] leading-none font-semibold text-slate-500">Selesai</span>
-                      </li>
-                    </ol>
-                  </div>
-
-                  {/* Finding Card (Authentic Inspection Photo) */}
-                  <div
-                    className={`bg-white rounded-2xl border p-3 space-y-2.5 shadow-xs transition-colors duration-300 ${
-                      mockupStatus === 'approved'
-                        ? 'border-emerald-300'
-                        : mockupStatus === 'rejected'
-                        ? 'border-slate-200'
-                        : 'border-amber-200'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between text-[10px]">
-                      <span className="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-md text-[9px]">
-                        Temuan Diagnosis #1
-                      </span>
-                      <span
-                        className={`font-sans font-black text-xs transition-colors ${
-                          mockupStatus === 'rejected' ? 'text-slate-400 line-through' : 'text-berlin-blue'
-                        }`}
-                      >
-                        Rp 850.000
-                      </span>
-                    </div>
-
-                    {/* Actual Inspection Photo with Ping Radar Pin */}
-                    <div className="relative aspect-[16/9] rounded-xl overflow-hidden bg-slate-900">
-                      <img
-                        src="/images/temuan-mesin.webp"
-                        alt="Mekanik Berlin 188 Garage memeriksa ruang mesin Mercedes-Benz"
-                        className="w-full h-full object-cover"
-                      />
-
-                      {/* Hotspot radar pin pointing to the leaking hose */}
-                      <span className="absolute left-[46%] top-[66%] -translate-x-1/2 -translate-y-1/2 w-9 h-9 pointer-events-none" aria-hidden="true">
-                        <span className="absolute inset-0 rounded-full border-2 border-red-500 animate-ping" />
-                        <span className="absolute inset-0 rounded-full border-2 border-red-500 bg-red-500/20" />
-                      </span>
-
-                      <span
-                        className="absolute left-[46%] top-[66%] translate-x-5 -translate-y-8 bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow pointer-events-none"
-                        aria-hidden="true"
-                      >
-                        Selang rembes
-                      </span>
-
-                      <div className="absolute bottom-1.5 left-1.5 bg-black/70 backdrop-blur-xs text-white text-[9px] font-medium px-1.5 py-0.5 rounded flex items-center gap-1">
-                        <Camera className="w-2.5 h-2.5" />
-                        Foto mekanik • 1/3
-                      </div>
-                    </div>
-
-                    <p className="text-[11px] text-slate-700 leading-snug font-medium">
-                      Selang radiator rembes &amp; coolant di bawah batas minimum. Disarankan ganti selang sebelum mesin overheat.
-                    </p>
-
-                    {/* Interactive Decision Actions */}
-                    {mockupStatus === 'pending' ? (
-                      <div className="grid grid-cols-2 gap-2 pt-1">
-                        <button
-                          type="button"
-                          onClick={() => setMockupStatus('approved')}
-                          className="bg-berlin-blue hover:bg-berlin-blue-dark text-white text-[11px] font-bold min-h-9 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1 shadow-xs"
-                        >
-                          <Check className="w-3.5 h-3.5 text-emerald-300" weight="bold" />
-                          <span>ACC Biaya</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setMockupStatus('rejected')}
-                          className="bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 text-[11px] font-semibold min-h-9 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1 border border-slate-200"
-                        >
-                          <X className="w-3.5 h-3.5" weight="bold" />
-                          <span>Tolak</span>
-                        </button>
-                      </div>
-                    ) : (
-                      <div
-                        role="status"
-                        className={`flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-[11px] font-semibold transition-all ${
-                          mockupStatus === 'approved'
-                            ? 'bg-emerald-50 text-emerald-800'
-                            : 'bg-slate-100 text-slate-700'
-                        }`}
-                      >
-                        <span className="flex items-center gap-1.5 truncate">
-                          {mockupStatus === 'approved' ? (
-                            <>
-                              <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" weight="bold" />
-                              <span>Disetujui — mekanik mulai kerja</span>
-                            </>
-                          ) : (
-                            <>
-                              <X className="w-3.5 h-3.5 text-slate-500 shrink-0" weight="bold" />
-                              <span>Ditolak — tanpa biaya</span>
-                            </>
-                          )}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => setMockupStatus('pending')}
-                          className="text-[10px] underline underline-offset-2 opacity-80 hover:opacity-100 cursor-pointer shrink-0"
-                        >
-                          Ulangi
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Open Full Portal Trigger Button inside Phone */}
-                  <button
-                    type="button"
-                    onClick={scrollToPortal}
-                    className="w-full bg-berlin-blue/10 hover:bg-berlin-blue/15 text-berlin-blue text-[11px] font-bold min-h-9 rounded-xl border border-berlin-blue/20 flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
-                  >
-                    <DeviceMobile className="w-3.5 h-3.5" weight="bold" />
-                    <span>Buka Portal Tracking Asli</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Floating Shield Badge (Bottom Left) */}
-              <div className="absolute -bottom-4 -left-3 sm:-left-6 bg-white border border-slate-200 p-2.5 rounded-2xl shadow-xl flex items-center gap-2.5 z-20">
-                <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
-                  <ShieldCheck className="w-5 h-5" weight="bold" />
-                </div>
-                <div className="text-left pr-2">
-                  <p className="text-[11px] font-extrabold text-slate-900 leading-none">Rp0 Biaya Kejutan</p>
-                  <p className="text-[10px] text-slate-500 mt-1 leading-none">Persetujuan 100% di tangan Anda</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ========================================================= */}
-        {/* 2. REAL WORKSHOP TRACKING PORTAL (Search & Live SPK View) */}
-        {/* ========================================================= */}
-        <div ref={portalRef} className="pt-8 border-t border-slate-200">
+        {/* Customer portal: look up a work order (SPK) and approve its findings. */}
+        <div>
           <div className="text-center max-w-2xl mx-auto mb-8">
-            <span className="rounded-full bg-berlin-blue/10 px-3 py-1 text-xs font-bold text-berlin-blue uppercase tracking-wider">
-              Portal Pelanggan Berlin 188
-            </span>
-            <h3 className="mt-3 text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
               Pencarian SPK &amp; Rekapitulasi Servis
-            </h3>
+            </h2>
             <p className="mt-2 text-sm text-slate-600">
               Masukkan nomor polisi atau nomor telepon terdaftar untuk melihat riwayat diagnosis dan menyetujui rincian biaya.
             </p>
@@ -534,7 +241,7 @@ export function ServiceTrackingSection() {
                       <span className="rounded-md bg-slate-100 px-2.5 py-1 font-mono text-xs font-bold text-slate-800">
                         SPK #{searchedOrder.workOrderNumber}
                       </span>
-                      <span className="rounded-md bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700">
+                      <span className="rounded-md bg-berlin-blue/10 px-2.5 py-1 text-xs font-bold text-berlin-blue">
                         {searchedOrder.warrantyPeriod}
                       </span>
                       <span className="text-xs text-slate-400">Masuk: {searchedOrder.checkInDate}</span>
@@ -572,7 +279,7 @@ export function ServiceTrackingSection() {
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-3 text-xs">
                     <span className="font-bold text-slate-600 uppercase tracking-wider">Tahapan Pengerjaan</span>
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-berlin-blue/10 px-3 py-1 font-bold text-berlin-blue text-xs">
-                      <span className="h-2 w-2 rounded-full bg-berlin-blue animate-pulse" />
+                      <Wrench className="h-3.5 w-3.5" weight="bold" aria-hidden="true" />
                       {getStatusText(searchedOrder.status)}
                     </span>
                   </div>
@@ -586,17 +293,17 @@ export function ServiceTrackingSection() {
                           <div
                             className={`h-2 sm:h-2.5 rounded-full transition-all duration-300 ${
                               isCompleted
-                                ? 'bg-emerald-500'
+                                ? 'bg-berlin-blue'
                                 : isCurrent
-                                ? 'bg-berlin-blue animate-pulse'
+                                ? 'bg-linear-to-r from-berlin-blue to-berlin-blue/20'
                                 : 'bg-slate-200'
                             }`}
                           />
                           <div className="flex items-center gap-1">
                             {isCompleted ? (
-                              <Check className="h-3 w-3 text-emerald-600 shrink-0" weight="bold" />
+                              <Check className="h-3 w-3 text-berlin-blue shrink-0" weight="bold" />
                             ) : isCurrent ? (
-                              <div className="h-2 w-2 rounded-full bg-berlin-blue shrink-0" />
+                              <div className="h-2 w-2 rounded-full border-2 border-berlin-blue shrink-0" />
                             ) : null}
                             <span
                               className={`text-[10px] sm:text-xs font-bold truncate ${
@@ -717,8 +424,7 @@ export function ServiceTrackingSection() {
                                   className="absolute w-7 h-7 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
                                   style={{ left: f.pinPosition.left, top: f.pinPosition.top }}
                                 >
-                                  <span className="absolute inset-0 rounded-full border-2 border-red-500 animate-ping" />
-                                  <span className="absolute inset-0 rounded-full border-2 border-red-500 bg-red-500/20" />
+                                  <span className="absolute inset-0 rounded-full border-2 border-berlin-red bg-berlin-red/15 shadow-[0_0_0_2px_rgb(255_255_255/0.7)]" />
                                 </span>
                               )}
 
@@ -776,7 +482,7 @@ export function ServiceTrackingSection() {
                                     onClick={() => handleDecision(f.id, 'approved')}
                                     className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all shadow-xs cursor-pointer ${
                                       currentDecision === 'approved'
-                                        ? 'bg-emerald-600 text-white'
+                                        ? 'bg-berlin-blue text-white'
                                         : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-100'
                                     }`}
                                   >
@@ -832,7 +538,7 @@ export function ServiceTrackingSection() {
                                   </span>
                                   <span
                                     className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
-                                      isApproved ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500'
+                                      isApproved ? 'bg-berlin-blue/10 text-berlin-blue' : 'bg-slate-100 text-slate-500'
                                     }`}
                                   >
                                     {isApproved ? 'DISETUJUI' : 'DITUNDA'}
@@ -878,9 +584,9 @@ export function ServiceTrackingSection() {
                             <div
                               className={`absolute -left-6 top-1 h-3.5 w-3.5 rounded-full border-2 bg-white ${
                                 item.status === 'completed'
-                                  ? 'border-emerald-500 bg-emerald-500'
+                                  ? 'border-berlin-blue bg-berlin-blue'
                                   : item.status === 'current'
-                                  ? 'border-berlin-blue animate-pulse'
+                                  ? 'border-berlin-red'
                                   : 'border-slate-300'
                               }`}
                             />
@@ -889,7 +595,7 @@ export function ServiceTrackingSection() {
                               <span
                                 className={`rounded px-1.5 py-0.5 text-[9px] font-bold ${
                                   item.status === 'completed'
-                                    ? 'bg-emerald-50 text-emerald-700'
+                                    ? 'bg-slate-100 text-slate-700'
                                     : item.status === 'current'
                                     ? 'bg-berlin-blue/10 text-berlin-blue font-extrabold'
                                     : 'bg-slate-100 text-slate-500'
@@ -937,7 +643,7 @@ export function ServiceTrackingSection() {
                         <Sparkle className="h-4 w-4 text-berlin-gold" weight="fill" />
                         <span>Ringkasan ACC</span>
                       </div>
-                      <span className="rounded-full bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 text-[10px]">
+                      <span className="rounded-full bg-berlin-blue/10 text-berlin-blue font-bold px-2 py-0.5 text-[10px]">
                         Garansi 6 Bulan
                       </span>
                     </div>
@@ -957,7 +663,7 @@ export function ServiceTrackingSection() {
                         href={getConfirmationWaLink()}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 py-3.5 px-4 text-xs sm:text-sm font-bold text-white hover:bg-emerald-700 transition-colors shadow-xs"
+                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-berlin-blue py-3.5 px-4 text-xs sm:text-sm font-bold text-white hover:bg-berlin-blue-dark transition-colors shadow-xs"
                       >
                         <WhatsappLogo className="h-5 w-5" weight="fill" />
                         <span>Kirim ACC ke SA via WhatsApp</span>
@@ -1010,7 +716,7 @@ export function ServiceTrackingSection() {
 
                       {/* Estimated Ready */}
                       <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 font-bold">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-berlin-blue/10 text-berlin-blue font-bold">
                           <Clock className="h-5 w-5" />
                         </div>
                         <div>
@@ -1024,7 +730,7 @@ export function ServiceTrackingSection() {
                   {/* 100% Transparency Promise */}
                   <div className="rounded-3xl bg-berlin-blue-dark text-white p-6 shadow-md">
                     <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-300">
-                      <ShieldCheck className="h-4 w-4 text-emerald-400" weight="bold" />
+                      <ShieldCheck className="h-4 w-4 text-berlin-blue-light" weight="bold" />
                       <span>Garansi &amp; Integritas Berlin 188</span>
                     </div>
                     <h4 className="mt-2 text-sm font-bold text-white">Part Lama Selalu Diserahkan</h4>
@@ -1054,7 +760,7 @@ export function ServiceTrackingSection() {
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-bold text-white hover:bg-emerald-700 shadow-xs"
+                  className="inline-flex items-center gap-2 rounded-xl bg-berlin-blue px-5 py-2.5 text-xs font-bold text-white hover:bg-berlin-blue-dark shadow-xs"
                 >
                   <WhatsappLogo className="h-4 w-4" weight="fill" />
                   <span>Konfirmasi via WhatsApp</span>

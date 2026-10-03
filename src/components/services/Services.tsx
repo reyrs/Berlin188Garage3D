@@ -5,6 +5,7 @@ import { bookingLink, serviceInquiryLink } from '../../lib/whatsapp';
 import { useSnapSlider } from '../../hooks/useSnapSlider';
 import { ButtonLink } from '../ui/ButtonLink';
 import { CurveAccent } from '../ui/CurveAccent';
+import { RollingDoor } from '../ui/RollingDoor';
 import { SliderControls } from '../ui/SliderControls';
 
 const COUNT = SERVICES.length;
@@ -80,6 +81,7 @@ export function Services() {
 
   return (
     <section id="layanan" aria-labelledby="layanan-title" aria-roledescription="carousel" className="relative scroll-mt-16 overflow-hidden bg-cloud-white py-20 lg:py-28">
+      <RollingDoor />
       <div className="mx-auto flex max-w-7xl items-end justify-between gap-6 px-4 sm:px-6 lg:px-8">
         <header data-reveal className="max-w-2xl">
           <p className="spec-label text-berlin-blue">Layanan</p>

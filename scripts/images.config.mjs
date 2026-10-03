@@ -49,12 +49,23 @@ export const SHOWROOM = [
   { id: 'land-rover', focusX: 0.67 },
 ];
 
-// Anatomi scroll story: AI stills (2816×1536) copied into assets-src/anatomi/<id>.jpg,
-// 16:9 centre crop. The stage keeps a 16:9 box on every screen, so no tall crop.
+// Hero story stills: the BMW M4 frames (video-kit/HERO-STORY.md), upscaled with Real-ESRGAN
+// (x4plus, run locally, not shipped) and saved as assets-src/anatomi/<id>.jpg at 2560-2752 px;
+// urai is the teardown clip's last frame. On the workshop frame (serah) the upscale is kept to
+// the car only: on the banners it turns soft lettering into fake letters. 16:9 centre crop;
+// the stage keeps a 16:9 box on every screen, so no tall crop.
 export const ANATOMI_SOURCE_DIR = 'assets-src/anatomi';
 export const ANATOMI_OUTPUT_DIR = 'public/images/anatomi';
 export const ANATOMI_WIDTHS = [960, 1600, 2400];
 export const ANATOMI = ['urai', 'xray', 'serah'];
+
+// Real phone photos of the workshop (from the berlin188-remotion project), copied into
+// assets-src/bengkel/<id>.jpg. Kept uncropped, never upscaled (the sources are 960–1280 px).
+// Also the references for the hero clips (video-kit/HERO-STORY.md).
+export const BENGKEL_SOURCE_DIR = 'assets-src/bengkel';
+export const BENGKEL_OUTPUT_DIR = 'public/images/bengkel';
+export const BENGKEL_WIDTHS = [480, 960];
+export const BENGKEL = ['bay', 'mezanin', 'overhaul', 'ban'];
 
 // Start frames for image-to-video (video-kit/README.md): the same crops at
 // the size video models expect, services from the blurred full-height photo.

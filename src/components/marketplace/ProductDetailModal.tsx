@@ -145,10 +145,9 @@ export function ProductDetailModal({
                 </span>
                 <span
                   className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                    isReady ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                    isReady ? 'bg-berlin-blue/10 text-berlin-blue' : 'bg-amber-100 text-amber-800'
                   }`}
                 >
-                  <span className={`h-1.5 w-1.5 rounded-full ${isReady ? 'bg-emerald-600' : 'bg-amber-600'}`} />
                   {isReady ? `Ready Stock (${product.stock} unit)` : 'Indent / Pre-order'}
                 </span>
               </div>
@@ -169,8 +168,8 @@ export function ProductDetailModal({
                 >
                   {copiedCode ? (
                     <>
-                      <CheckCircle className="h-3.5 w-3.5 text-emerald-600" weight="bold" />
-                      <span className="text-emerald-700">Tersalin</span>
+                      <CheckCircle className="h-3.5 w-3.5 text-berlin-blue" weight="bold" />
+                      <span className="text-berlin-blue">Tersalin</span>
                     </>
                   ) : (
                     <>
@@ -246,7 +245,7 @@ export function ProductDetailModal({
                   onClick={handleAddToCart}
                   className={`flex items-center justify-center gap-2 rounded-xl py-3 px-4 font-bold text-sm transition-all duration-150 active:scale-98 ${
                     added
-                      ? 'bg-emerald-600 text-white'
+                      ? 'bg-berlin-blue-dark text-white'
                       : 'bg-berlin-blue text-white hover:bg-berlin-blue-dark shadow-product'
                   }`}
                 >
@@ -278,7 +277,7 @@ export function ProductDetailModal({
                 href={createSingleProductWhatsAppUrl(product, selectedService)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-emerald-700 transition-colors shadow-xs"
+                className="flex items-center justify-center gap-2 rounded-xl bg-berlin-blue px-4 py-2.5 text-sm font-bold text-white hover:bg-berlin-blue-dark transition-colors shadow-xs"
               >
                 <WhatsappLogo className="h-5 w-5" weight="fill" />
                 <span>Konsultasi Part via WhatsApp</span>

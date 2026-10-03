@@ -1,5 +1,8 @@
 # Scroll story: animasi scroll ala web viral
 
+> **Diganti oleh [HERO-STORY.md](HERO-STORY.md) (3 Okt 2026):** urutan klip yang sama, tapi mulai dari
+> bengkel asli Berlin 188 dan latar deep navy `#04152D`. Dokumen ini tetap jadi catatan teknik dan versi lama.
+
 > **Status (26 Sep 2026):** "Anatomi servis" adalah hero homepage (layar pertama, sebelum Layanan):
 > `src/components/anatomy/Anatomy.tsx`, teks di `src/data/anatomy.ts`. Adegan pertama memuat teks hero,
 > tombol booking, dan logo merek.

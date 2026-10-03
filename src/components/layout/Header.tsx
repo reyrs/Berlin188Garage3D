@@ -31,7 +31,7 @@ interface HeaderProps {
 const LINK_ICONS: Record<string, React.ReactNode> = {
   '#layanan': <Wrench className="h-5 w-5" weight="duotone" />,
   '#promo': <Tag className="h-5 w-5" weight="duotone" />,
-  '#cek-servis': <ShieldCheck className="h-5 w-5 text-emerald-400" weight="duotone" />,
+  '#cek-servis': <MagnifyingGlass className="h-5 w-5" weight="duotone" />,
   '#marketplace': <Package className="h-5 w-5" weight="duotone" />,
   '/garasi/': <Cube className="h-5 w-5 text-berlin-gold" weight="duotone" />,
   '#lokasi': <MapPin className="h-5 w-5" weight="duotone" />,
@@ -116,10 +116,7 @@ export function Header({ links, logoHref = '#top', current }: HeaderProps) {
                         href={link.href}
                         className="inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-white/10 px-3.5 py-1.5 text-[0.875rem] font-bold text-white ring-1 ring-white/20 transition-all duration-200 hover:bg-berlin-blue hover:ring-berlin-blue shadow-xs"
                       >
-                        <span className="relative flex h-2 w-2">
-                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-                        </span>
+                        <MagnifyingGlass className="h-4 w-4" weight="bold" aria-hidden="true" />
                         <span>{link.label}</span>
                       </a>
                     </li>
@@ -151,10 +148,7 @@ export function Header({ links, logoHref = '#top', current }: HeaderProps) {
               onClick={() => setMobileMenuOpen(false)}
               className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-xs font-bold text-white ring-1 ring-white/25 active:bg-berlin-blue transition-colors"
             >
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-              </span>
+              <MagnifyingGlass className="h-3.5 w-3.5" weight="bold" aria-hidden="true" />
               <span>Cek Servis</span>
             </a>
 
@@ -190,7 +184,7 @@ export function Header({ links, logoHref = '#top', current }: HeaderProps) {
                 <ShieldCheck className="h-4 w-4" weight="bold" />
                 <span>Status & Antrean Hari Ini</span>
               </div>
-              <span className="rounded-full bg-emerald-500/20 text-emerald-400 px-2 py-0.5 text-[10px] font-bold">
+              <span className="rounded-full bg-cloud-white/10 text-cloud-white/80 px-2 py-0.5 text-[10px] font-bold">
                 Live Workshop
               </span>
             </div>
@@ -246,7 +240,7 @@ export function Header({ links, logoHref = '#top', current }: HeaderProps) {
               href={bookingLink()}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 py-3.5 px-4 text-sm font-bold text-white shadow-md active:bg-emerald-700"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-berlin-blue py-3.5 px-4 text-sm font-bold text-white shadow-md active:bg-berlin-blue-dark"
             >
               <WhatsappLogo className="h-5 w-5" weight="fill" />
               <span>Booking Servis via WhatsApp</span>

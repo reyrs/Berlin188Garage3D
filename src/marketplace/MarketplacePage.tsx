@@ -3,6 +3,13 @@ import { Footer } from '../components/layout/Footer';
 import { MobileBookingBar } from '../components/layout/MobileBookingBar';
 import { MarketplaceView } from '../components/marketplace/MarketplaceView';
 import { House, CaretRight } from '@phosphor-icons/react';
+import { CATEGORIES, type ProductCategory } from '../data/products';
+
+/** ?kategori=Kaki-Kaki opens the catalogue on that category (linked from /garasi). */
+function categoryFromUrl(): ProductCategory | 'Semua' {
+  const value = new URLSearchParams(window.location.search).get('kategori');
+  return CATEGORIES.find((category) => category === value) ?? 'Semua';
+}
 
 const MARKETPLACE_NAV_LINKS: NavLink[] = [
   { href: '/', label: 'Beranda' },
@@ -33,7 +40,7 @@ export function MarketplacePage() {
         </nav>
 
         {/* Marketplace Engine */}
-        <MarketplaceView showHeaderTitle={true} />
+        <MarketplaceView showHeaderTitle={true} initialCategory={categoryFromUrl()} />
       </main>
 
       {/* Footer & Mobile Bar */}

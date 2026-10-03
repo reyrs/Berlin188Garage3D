@@ -21,6 +21,10 @@
   --color-cloud-white: #F4F6FF;
   --color-jet-black: #002D5A;
   --color-berlin-blue-deep: #04152D;
+  /* Backdrop of the hero clips (video-kit/HERO-STORY.md asks for #04152D).
+     The hero, its stage fade and the rolling door use it, so the clip edges
+     melt into the page. Retune it to the colour the clips actually came out in. */
+  --color-stage: #04152D;
 
   --color-slate-50: #F8FAFC;
   --color-slate-100: #F1F5F9;
@@ -34,11 +38,6 @@
   --color-slate-900: #0F172A;
   --color-slate-950: #080D1A;
   --color-black: #000000;
-
-  --color-emerald-400: #34D399;
-  --color-emerald-500: #10B981;
-  --color-emerald-600: #059669;
-  --color-emerald-700: #047857;
 
   --color-amber-400: #FBBF24;
   --color-amber-500: #F59E0B;
@@ -261,11 +260,13 @@
 /* ---- Hero + Anatomi scroll story (Anatomy.tsx) ---- */
 
 /* One 16:9 stage for every scene, so hotspot percentages stay on their parts.
-   Phones: under the header, a bit wider than the screen, with the caption
-   below it. From lg: the right three quarters, beside the caption. Every
-   edge fades into the page, so the AI backgrounds never show a frame. */
+   Phones: under the header, wider than the screen and shifted so the car
+   (centred at 62% of every frame, right of the hero copy on desktop) sits in
+   the middle, with the caption below it. From lg: the right three quarters,
+   beside the caption. Every edge fades into the page, so the AI backgrounds
+   never show a frame. */
 .anatomi {
-  --stage-w: min(112vw, calc(62svh * 16 / 9));
+  --stage-w: min(120vw, calc(62svh * 16 / 9));
 }
 .anatomi-stage {
   position: absolute;
@@ -273,7 +274,7 @@
   top: 4rem;
   width: var(--stage-w);
   aspect-ratio: 16 / 9;
-  translate: -50% 0;
+  translate: -62% 0;
   --fade-x: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
   --fade-y: linear-gradient(to bottom, transparent, #000 14%, #000 80%, transparent);
   -webkit-mask-image: var(--fade-x), var(--fade-y);
@@ -308,6 +309,56 @@
   .anatomi-captions {
     top: 50%;
   }
+}
+
+/* ---- Rolling door between the dark hero and the light page (RollingDoor.tsx) ---- */
+
+/* Covers the first screen of the section; GSAP rolls the panel up. Same slat
+   rhythm as the intro door, in the hero's stage colour. */
+.rolling-door {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 20;
+  height: 100svh;
+  overflow: hidden;
+  pointer-events: none;
+}
+.rolling-door__panel {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-stage);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0 54px,
+    rgb(0 0 0 / 0.35) 54px 55px,
+    rgb(255 255 255 / 0.06) 55px 56px
+  );
+  will-change: transform;
+}
+/* Daylight leaking under the bottom edge of the door. */
+.rolling-door__seam {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgb(244 246 255 / 0.9) 50%, transparent);
+  box-shadow: 0 0 24px 4px rgb(244 246 255 / 0.35);
+}
+
+/* ---- Process line (Journey.tsx) ---- */
+
+/* A red ring on the line per step (brand: red is a ring or a curve, never a
+   straight bar); it fills once the line has reached it. */
+.journey-marker {
+  width: 19px;
+  height: 19px;
+  border-radius: 9999px;
+  border: 3px solid var(--color-berlin-red);
+  background-color: var(--color-cloud-white);
+  transition: background-color 0.3s var(--ease-out-quint), box-shadow 0.3s var(--ease-out-quint);
+}
+.journey-marker.is-passed {
+  background-color: var(--color-berlin-red);
+  box-shadow: inset 0 0 0 3px var(--color-cloud-white);
 }
 
 /* ---- Swipe rows and sliders ---- */

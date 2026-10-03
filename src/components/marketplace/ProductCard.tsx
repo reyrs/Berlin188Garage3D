@@ -73,11 +73,10 @@ export function ProductCard({ product, onSelectDetail }: ProductCardProps) {
             <span
               className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-medium backdrop-blur-md shadow-xs ${
                 isReady
-                  ? 'bg-emerald-500/90 text-white'
+                  ? 'bg-berlin-blue/90 text-white'
                   : 'bg-slate-700/80 text-white'
               }`}
             >
-              <span className={`h-1.5 w-1.5 rounded-full ${isReady ? 'bg-white' : 'bg-amber-400'}`} />
               {isReady ? `Stok ${product.stock}` : 'Indent'}
             </span>
           </div>
@@ -131,7 +130,7 @@ export function ProductCard({ product, onSelectDetail }: ProductCardProps) {
             onClick={handleAddToCart}
             className={`flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-all duration-150 active:scale-95 ${
               justAdded
-                ? 'bg-emerald-600 text-white'
+                ? 'bg-berlin-blue-dark text-white'
                 : 'bg-berlin-blue text-white hover:bg-berlin-blue-dark shadow-xs'
             }`}
           >

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { WhatsappLogo, ShieldCheck } from '@phosphor-icons/react';
+import { MagnifyingGlass, WhatsappLogo } from '@phosphor-icons/react';
 import { bookingLink } from '../../lib/whatsapp';
 import { ScrollTrigger } from '../../lib/gsap';
 
@@ -48,11 +48,7 @@ export function MobileBookingBar() {
             href="#cek-servis"
             className="flex h-11 items-center justify-center gap-1.5 rounded-xl bg-white/10 px-3.5 text-xs font-bold text-white transition-colors active:bg-white/20 shrink-0"
           >
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-            </span>
-            <ShieldCheck className="h-4 w-4 text-emerald-400" weight="bold" />
+            <MagnifyingGlass className="h-4 w-4" weight="bold" aria-hidden="true" />
             <span>Cek Servis</span>
           </a>
 

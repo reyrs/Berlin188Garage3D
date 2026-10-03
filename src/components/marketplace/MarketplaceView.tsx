@@ -464,7 +464,7 @@ export function MarketplaceView({
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white hover:bg-emerald-700 shadow-xs"
+                className="inline-flex items-center gap-2 rounded-xl bg-berlin-blue px-4 py-2.5 text-xs font-bold text-white hover:bg-berlin-blue-dark shadow-xs"
               >
                 <WhatsappLogo className="h-4 w-4" weight="fill" />
                 <span>Tanya Part via WhatsApp</span>

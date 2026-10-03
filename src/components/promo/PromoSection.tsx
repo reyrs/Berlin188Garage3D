@@ -68,7 +68,7 @@ export function PromoSection() {
             )}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-xs hover:bg-emerald-700 transition-colors shrink-0"
+            className="inline-flex items-center gap-2 rounded-xl bg-berlin-blue px-5 py-3 text-sm font-bold text-white shadow-xs hover:bg-berlin-blue-dark transition-colors shrink-0"
           >
             <WhatsappLogo className="h-5 w-5" weight="fill" />
             <span>Hubungi via WhatsApp</span>
@@ -174,7 +174,7 @@ export function PromoSection() {
                     <div className="mt-4 pt-4 border-t border-slate-100 space-y-2">
                       {promo.highlights.map((point, idx) => (
                         <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-700">
-                          <Check className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" weight="bold" />
+                          <Check className="h-4 w-4 text-berlin-blue shrink-0 mt-0.5" weight="bold" />
                           <span>{point}</span>
                         </div>
                       ))}
@@ -280,7 +280,7 @@ export function PromoSection() {
                       </div>
                       {pkg.services.map((svc, i) => (
                         <div key={i} className="flex items-center gap-2 text-xs text-slate-700">
-                          <Check className="h-3.5 w-3.5 text-emerald-600 shrink-0" weight="bold" />
+                          <Check className="h-3.5 w-3.5 text-berlin-blue shrink-0" weight="bold" />
                           <span>{svc}</span>
                         </div>
                       ))}
@@ -326,11 +326,11 @@ export function PromoSection() {
 
           <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
             <div className="flex items-center gap-2 text-xs text-cloud-white/70">
-              <Car className="h-4 w-4 text-emerald-400" />
+              <Car className="h-4 w-4 text-berlin-blue-light" />
               <span>Gratis Cuci Mobil</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-cloud-white/70">
-              <Wrench className="h-4 w-4 text-amber-400" />
+              <Wrench className="h-4 w-4 text-berlin-blue-light" />
               <span>Diagnosa Komputer OBD</span>
             </div>
           </div>
@@ -382,7 +382,7 @@ export function PromoSection() {
                 href={getWhatsAppUrl(`Halo Berlin 188 Garage, saya melihat poster ${lightboxImage.title} dan ingin konsultasi servis.`)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-emerald-700 transition-colors shadow-xs"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-berlin-blue px-3.5 py-2 text-xs font-bold text-white hover:bg-berlin-blue-dark transition-colors shadow-xs"
               >
                 <WhatsappLogo className="h-4 w-4" weight="fill" />
                 <span>Booking via WA</span>

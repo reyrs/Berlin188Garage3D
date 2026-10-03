@@ -1,14 +1,15 @@
-# Video kit — video yang diputar mengikuti scroll
+# Video kit
 
-Website sudah jalan dengan foto. Setiap foto punya "slot video": begitu klipnya ada,
-video itu otomatis menggantikan foto dan diputar maju/mundur mengikuti scroll
-(bukan autoplay). Foto tetap jadi cadangan kalau video belum termuat.
+Website sudah jalan dengan foto. Setiap foto punya "slot video": begitu klipnya ada, klip itu terdaftar
+di `src/data/media.ts`. Saat ini hanya hero yang memutar video: **autoplay**, berulang, dengan tombol jeda
+(lihat [HERO-STORY.md](HERO-STORY.md)). Foto tetap jadi cadangan kalau video belum termuat.
 
 Semua gambar awal (start frame) ada di `start-frames/`, ukurannya sudah pas untuk
 image-to-video (Higgsfield, Gemini/Veo, Kling, Runway, dll.).
 
-**Animasi scroll ala web viral** (mobil terurai jadi part, x-ray, dan seterusnya, pakai gambar awal + gambar
-akhir): lihat [SCROLL-STORY.md](SCROLL-STORY.md).
+**Hero** (BMW M4 di bengkel asli Berlin 188, kain tersingkap, lalu terurai jadi part dan x-ray,
+pakai gambar awal + gambar akhir): lihat **[HERO-STORY.md](HERO-STORY.md)**. Versi sebelumnya (mulai dari
+showroom, latar `#181818`): [SCROLL-STORY.md](SCROLL-STORY.md).
 
 ## Alur kerja
 
@@ -21,11 +22,11 @@ akhir): lihat [SCROLL-STORY.md](SCROLL-STORY.md).
 5. Simpan dengan **nama yang sama dengan start frame-nya**, ekstensi `.mp4`
    (atau `.mov`/`.webm`), ke folder `video-kit/clips/`. Contoh:
    `start-frames/showroom-bmw-16x9.jpg` → `clips/showroom-bmw-16x9.mp4`
-6. Jalankan `npm run videos`. Script mengompres klip untuk scroll (keyframe rapat),
+6. Jalankan `npm run videos`. Script mengompres klip jadi video web biasa,
    menaruh hasilnya di `public/videos/`, dan mendaftarkannya di `src/data/media.ts`.
    Klip yang sudah diproses dilewati; `npm run videos -- --force` untuk proses ulang.
 
-Prioritas: video **Anatomi** (hero di layar pertama, lihat [SCROLL-STORY.md](SCROLL-STORY.md)).
+Prioritas: video **hero** (layar pertama, lihat [HERO-STORY.md](HERO-STORY.md)).
 Foto showroom per merek sekarang tampil di slider "Merek yang kami servis", dan foto layanan di kartu per
 kelompok, keduanya sebagai foto diam. Jadi klip showroom dan klip layanan di bawah ini belum dipakai di
 halaman.
@@ -94,9 +95,8 @@ lalu tambahkan kalimat aksinya:
 ## Ukuran file
 
 Klip dikompres ke maksimal 1600×900 (16:9) dan 720×1280 (9:16), tidak pernah diperbesar
-(klip 720p tetap 720p), 30 fps maks, dengan keyframe setiap 6 frame supaya scroll maju-mundur tetap mulus. Hasilnya lebih besar dari video
-biasa (sekitar 1–4 MB per 5 detik), jadi pakai durasi 5–8 detik saja. Browser hanya
-mengunduh video yang sedang atau akan segera tampil.
+(klip 720p tetap 720p), 30 fps maks, sebagai video web biasa (klip hero 4 detik sekitar 0,4–0,6 MB).
+Browser hanya mengunduh video yang sedang atau akan segera tampil.
 
 `ffmpeg` sudah ikut sebagai dev dependency (`ffmpeg-static`). Kalau `npm install`
 menahan script instalasinya, jalankan `npm approve-scripts ffmpeg-static`, atau pasang

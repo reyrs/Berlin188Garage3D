@@ -200,7 +200,7 @@ export function CartDrawer() {
               <button
                 type="button"
                 onClick={handleWhatsAppOrder}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 py-3 px-4 text-sm font-bold text-white shadow-xs hover:bg-emerald-700 transition-colors"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-berlin-blue py-3 px-4 text-sm font-bold text-white shadow-xs hover:bg-berlin-blue-dark transition-colors"
               >
                 <WhatsappLogo className="h-5 w-5" weight="fill" />
                 <span>Pesan / Konfirmasi via WhatsApp</span>
@@ -229,7 +229,7 @@ export function CartDrawer() {
 
             {/* Trust footer note */}
             <div className="flex items-center justify-center gap-2 text-[11px] text-slate-500">
-              <ShieldCheck className="h-4 w-4 text-emerald-600" />
+              <ShieldCheck className="h-4 w-4 text-berlin-blue" />
               <span>Pemeriksaan kompatibilitas gratis sebelum transaksi</span>
             </div>
           </div>

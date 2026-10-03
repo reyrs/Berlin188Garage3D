@@ -7,8 +7,14 @@ workshop, not a dealer or authorised service centre of the brands shown.
   by Berlin 188 Garage, one per make; cropped to 16:9 and 9:16 and resized.
 - **Service photos** (`public/images/services/`): AI-generated reference images supplied by Berlin 188 Garage,
   cropped, resized and with garbled AI lettering blurred.
-- **Scroll videos** (`public/videos/`, when present): image-to-video clips generated from the photos above
-  (see `video-kit/README.md`), re-encoded for scrubbing.
+- **Workshop photos** (`assets-src/bengkel/` → `public/images/bengkel/`): real phone photos of the Berlin 188
+  Garage workshop, supplied by Berlin 188 Garage (from the berlin188-remotion project); resized only.
+- **Hero stills** (`assets-src/anatomi/` → `public/images/anatomi/`): AI-generated frames (Gemini) of the same story,
+  upscaled with Real-ESRGAN (BSD-3-Clause; run locally, not shipped).
+- **Garage depth maps** (`public/images/garasi/*-depth.png`): made from the hero stills with Depth Anything V2 Small
+  (Apache-2.0, run locally via transformers.js; not shipped).
+- **Hero videos** (`public/videos/`): image-to-video clips generated from the stills in `video-kit/start-frames/`
+  (see `video-kit/HERO-STORY.md`), re-encoded for the web.
 - **Make logos** (`src/data/brandMarks.ts`): Simple Icons (CC0 icon data; the marks are trademarks of their owners).
   Used only to say which makes the workshop services, next to the site's independent-workshop disclaimer.
 - **Logos** (`public/brand/`): copied from the Berlin 188 Garage main site. `logo-dark.png` is a transparent cut of

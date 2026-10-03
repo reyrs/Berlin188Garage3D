@@ -5,10 +5,11 @@
 //   showroom: one photo per make → 16:9 wide + 9:16 tall crops → AVIF + WebP
 //             in public/images/showroom/
 //   anatomi:  scroll-story stills → 16:9 → AVIF + WebP in public/images/anatomi/
+//   bengkel:  real workshop photos → uncropped → AVIF + WebP in public/images/bengkel/
 //   kit:      start frames for image-to-video in video-kit/start-frames/
 //
-//   npm run images                  # services + showroom
-//   npm run images -- --showroom    # one group only (--services, --showroom, --anatomi, --kit)
+//   npm run images                  # every group except kit
+//   npm run images -- --showroom    # one group only (--services, --showroom, --anatomi, --bengkel, --kit)
 //   npm run images -- tune-up       # one service photo
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -18,6 +19,10 @@ import {
   ANATOMI_OUTPUT_DIR,
   ANATOMI_SOURCE_DIR,
   ANATOMI_WIDTHS,
+  BENGKEL,
+  BENGKEL_OUTPUT_DIR,
+  BENGKEL_SOURCE_DIR,
+  BENGKEL_WIDTHS,
   CARD,
   KIT_DIR,
   OUTPUT_DIR,
@@ -34,7 +39,7 @@ import {
 
 const flags = new Set(process.argv.slice(2).filter((a) => a.startsWith('--')));
 const wanted = process.argv.slice(2).filter((a) => !a.startsWith('--'));
-const only = ['--services', '--showroom', '--anatomi', '--kit'].filter((f) => flags.has(f));
+const only = ['--services', '--showroom', '--anatomi', '--bengkel', '--kit'].filter((f) => flags.has(f));
 const run = (group) => (only.length ? only.includes(`--${group}`) : group !== 'kit');
 
 async function findSource(stamp) {
@@ -130,8 +135,23 @@ if (run('anatomi')) {
   for (const id of ANATOMI) {
     const buffer = await fs.readFile(path.join(ANATOMI_SOURCE_DIR, `${id}.jpg`));
     const { wide } = showroomCrops(await sharp(buffer).metadata(), 0.5);
-    const w = await writeVariants(buffer, ANATOMI_OUTPUT_DIR, id, wide, ANATOMI_WIDTHS, { avif: 56, webp: 80 });
+    // Full-screen hero frames: higher quality than the cards, or the detail the upscale added is lost again.
+    const w = await writeVariants(buffer, ANATOMI_OUTPUT_DIR, id, wide, ANATOMI_WIDTHS, { avif: 68, webp: 86 });
     console.log(`${id.padEnd(8)} ${w.join(' · ')} (avif/webp)`);
+  }
+}
+
+if (run('bengkel')) {
+  await fs.mkdir(BENGKEL_OUTPUT_DIR, { recursive: true });
+  for (const id of BENGKEL) {
+    const buffer = await fs.readFile(path.join(BENGKEL_SOURCE_DIR, `${id}.jpg`));
+    // Phone photos: apply the EXIF rotation before reading the size.
+    const upright = await sharp(buffer).rotate().toBuffer();
+    const meta = await sharp(upright).metadata();
+    const full = { left: 0, top: 0, width: meta.width, height: meta.height };
+    const widths = BENGKEL_WIDTHS.filter((w) => w <= meta.width);
+    const w = await writeVariants(upright, BENGKEL_OUTPUT_DIR, id, full, widths);
+    console.log(`${id.padEnd(10)} ${meta.width}×${meta.height}  ${w.join(' · ')} (avif/webp)`);
   }
 }
 

@@ -4,6 +4,7 @@ import { GarageDoor } from './components/showroom/GarageDoor';
 import { Services } from './components/services/Services';
 import { Anatomy } from './components/anatomy/Anatomy';
 import { PromoSection } from './components/promo/PromoSection';
+import { Journey } from './components/journey/Journey';
 import { ServiceTrackingSection } from './components/tracking/ServiceTrackingSection';
 import { MarketplaceSection } from './components/marketplace/MarketplaceSection';
 import { Brands } from './components/brands/Brands';
@@ -41,6 +42,7 @@ export default function App() {
         <Anatomy />
         <Services />
         <PromoSection />
+        <Journey />
         <ServiceTrackingSection />
         <MarketplaceSection />
         <Brands />

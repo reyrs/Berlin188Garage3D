@@ -110,7 +110,7 @@ export function MarketplaceSection() {
 
           <div className="flex items-center gap-3 rounded-2xl bg-white p-4 border border-slate-200 shadow-xs">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-berlin-blue/10 text-berlin-blue">
-              <WhatsappLogo className="h-6 w-6 text-emerald-600" weight="duotone" />
+              <WhatsappLogo className="h-6 w-6 text-berlin-blue" weight="duotone" />
             </div>
             <div>
               <div className="text-xs font-bold text-slate-900">Konsultasi Part Langsung</div>
@@ -189,7 +189,7 @@ export function MarketplaceSection() {
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-xs font-bold text-white hover:bg-emerald-700 transition-colors shadow-xs"
+              className="inline-flex items-center gap-2 rounded-xl bg-berlin-blue px-5 py-3 text-xs font-bold text-white hover:bg-berlin-blue-dark transition-colors shadow-xs"
             >
               <WhatsappLogo className="h-4 w-4" weight="fill" />
               <span>Tanya Teknisi via WA</span>
